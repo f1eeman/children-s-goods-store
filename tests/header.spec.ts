@@ -4,39 +4,37 @@ test.beforeEach(async ({ page }) => {
   await page.goto('/')
 })
 
-test('якоря шапки ведут в существующие id', async ({ page }) => {
-  const links = page.locator('header .nav-link')
-
-  await expect(links).not.toHaveCount(0)
-
-  for (const href of await links.evaluateAll((nodes) =>
-    nodes.map((node) => node.getAttribute('href')),
-  )) {
-    expect(href).toMatch(/^#[a-z-]+$/)
-    await expect(page.locator(String(href))).toHaveCount(1)
-  }
+test('в шапке есть навигация и поиск', async ({ page }) => {
+  await expect(page.locator('header .nav-link')).not.toHaveCount(0)
+  await expect(
+    page.getByRole('searchbox', { name: 'Искать товар на сайте' }),
+  ).toBeVisible()
 })
 
-test('переход по якорю доезжает до секции и показывает её', async ({
-  page,
-}) => {
-  await page.locator('header .nav-link', { hasText: 'Раздел' }).click()
+test('кнопка «Каталог» ведёт в каталог одежды', async ({ page }) => {
+  await page.locator('header').getByRole('link', { name: 'Каталог' }).click()
 
-  expect(new URL(page.url()).hash).toBe('#sample')
-
-  const section = page.locator('#sample')
-
-  await expect(section).toBeInViewport()
-  await expect(section.getByRole('heading', { level: 2 })).toBeVisible()
+  await expect(page).toHaveURL(/\/catalog\/$/)
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Одежда')
 })
 
-test('контакты подвала — живая цель якоря «Контакты»', async ({ page }) => {
+test('якорь «Контакты» ведёт в раздел контактов', async ({ page }) => {
   await page.locator('header .nav-link', { hasText: 'Контакты' }).click()
 
   const contacts = page.locator('#contacts')
 
   await expect(contacts).toBeInViewport()
   await expect(
-    contacts.getByRole('link', { name: /mail@example\.invalid/ }),
+    contacts.getByRole('heading', { name: 'Наши контакты' }),
   ).toBeVisible()
+})
+
+test('логотип возвращает на главную', async ({ page }) => {
+  await page.goto('/catalog/')
+  await page
+    .locator('header')
+    .getByRole('link', { name: /на главную/ })
+    .click()
+
+  await expect(page).toHaveURL(/\/$/)
 })

@@ -8,8 +8,7 @@ const DESKTOP = { width: 1440, height: 900 }
 const menuOf = (page: Page) => page.locator('[data-menu]')
 const toggleOf = (page: Page) => page.locator('[data-menu-toggle]')
 const panelOf = (page: Page) => page.locator('[data-menu] nav')
-const linkOf = (page: Page) =>
-  menuOf(page).getByRole('link', { name: 'Заявка' })
+const linkOf = (page: Page) => menuOf(page).getByRole('link', { name: 'Акции' })
 
 test.describe('мобильное меню', () => {
   test.beforeEach(async ({ page }) => {
@@ -61,12 +60,11 @@ test.describe('мобильное меню', () => {
     await expect(toggleOf(page)).toBeFocused()
   })
 
-  test('клик по якорю закрывает меню', async ({ page }) => {
+  test('клик по ссылке закрывает меню', async ({ page }) => {
     await toggleOf(page).click()
-    await linkOf(page).click()
+    await menuOf(page).getByRole('link', { name: 'Сертификаты' }).click()
 
     await expect(menuOf(page)).not.toHaveAttribute('open')
-    expect(new URL(page.url()).hash).toBe('#request')
   })
 
   test('клик мимо панели закрывает меню', async ({ page }) => {
