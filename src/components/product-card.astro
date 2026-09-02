@@ -1,0 +1,179 @@
+---
+import { Image } from 'astro:assets'
+
+import Button from '@/components/button.astro'
+import LabelChip from '@/components/label-chip.astro'
+import { hrefOf, type Product } from '@/data/catalog'
+
+interface Props {
+  product: Product
+  sizes?: string
+  class?: string
+}
+
+const {
+  product,
+  sizes = '(width >= 1250px) 270px, (width >= 768px) 45vw, 90vw',
+  class: className,
+} = Astro.props
+
+const href = hrefOf(product)
+---
+
+<article
+  class:list={['card', className]}
+  data-card
+  data-price={product.price}
+  data-gender={product.gender}
+  data-material={product.material}
+  data-title={product.title}
+>
+  <a class="shot" href={href} tabindex="-1" aria-hidden="true">
+    <Image
+      class="photo"
+      src={product.image}
+      alt=""
+      widths={[270, 540]}
+      {sizes}
+      loading="lazy"
+    />
+    {
+      product.oldPrice !== undefined && (
+        <span class="labels">
+          <LabelChip>sale</LabelChip>
+        </span>
+      )
+    }
+  </a>
+
+  <h3 class="title"><a class="title-link" href={href}>{product.title}</a></h3>
+
+  {product.oldPrice !== undefined && <p class="old">{product.oldPrice} ₽</p>}
+
+  <div class="row">
+    <p class="price">{product.price}₽</p>
+    <Button type="button" class="to-cart">В корзину</Button>
+  </div>
+</article>
+
+<style>
+  .card {
+    position: relative;
+    z-index: 0;
+    display: flex;
+    flex-direction: column;
+    inline-size: 100%;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    inset: -15px;
+    border-radius: var(--radius-block);
+    background-color: var(--color-surface-card);
+    box-shadow: var(--shadow-card);
+    opacity: 0;
+    transition: opacity 180ms ease;
+  }
+
+  .shot {
+    position: relative;
+    display: block;
+    border-radius: var(--radius-block);
+    overflow: hidden;
+  }
+
+  .photo {
+    inline-size: 100%;
+    block-size: auto;
+    aspect-ratio: 270 / 325;
+    object-fit: cover;
+  }
+
+  .labels {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    display: flex;
+    gap: 4px;
+  }
+
+  .title {
+    margin-block-start: 20px;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 1.5;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .title-link {
+    transition: color 180ms ease;
+  }
+
+  .old {
+    position: relative;
+    align-self: start;
+    margin-block-start: 6px;
+    color: var(--color-text-muted);
+  }
+
+  .old::after {
+    content: '';
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline: 0;
+    block-size: 1px;
+    background-color: currentcolor;
+    transform: rotate(-13deg);
+  }
+
+  .row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+    margin-block-start: 6px;
+  }
+
+  .price {
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 1.2;
+  }
+
+  .title-link:focus-visible,
+  .shot:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 4px;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .title-link:hover {
+      color: var(--color-accent);
+    }
+  }
+
+  @media (width >= 768px) {
+    .title {
+      font-size: 18px;
+    }
+
+    .price {
+      font-size: 25px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card::before,
+    .title-link {
+      transition: none;
+    }
+  }
+</style>

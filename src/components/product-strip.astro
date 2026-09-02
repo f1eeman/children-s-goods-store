@@ -1,0 +1,31 @@
+---
+import Carousel from '@/components/carousel.astro'
+import ProductCard from '@/components/product-card.astro'
+import type { Product } from '@/data/catalog'
+
+interface Props {
+  title: string
+  products: Product[]
+  id: string
+}
+
+const { title, products, id } = Astro.props
+---
+
+<section class="section" data-region aria-labelledby={id}>
+  <div class="container">
+    <Carousel {title} label={title}>
+      {
+        products.map((product) => (
+          <ProductCard {product} sizes="(width >= 768px) 270px, 72vw" />
+        ))
+      }
+    </Carousel>
+  </div>
+</section>
+
+<style>
+  .section :global(.heading) {
+    scroll-margin-block-start: 24px;
+  }
+</style>

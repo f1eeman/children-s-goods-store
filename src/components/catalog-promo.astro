@@ -1,0 +1,81 @@
+---
+import { Image } from 'astro:assets'
+
+import { SIDEBAR_PROMO } from '@/data/banners'
+---
+
+<a class="promo" href={SIDEBAR_PROMO.href}>
+  <span class="shot">
+    <Image
+      class="photo"
+      src={SIDEBAR_PROMO.image}
+      alt={SIDEBAR_PROMO.alt}
+      widths={[270, 540]}
+      sizes="(width >= 1024px) 270px, 90vw"
+      loading="lazy"
+    />
+  </span>
+  <span class="copy">{SIDEBAR_PROMO.title}</span>
+</a>
+
+<style>
+  .promo {
+    display: block;
+    border-radius: var(--radius-block);
+    background-color: var(--color-surface-cream);
+    overflow: hidden;
+  }
+
+  .shot {
+    display: block;
+    overflow: hidden;
+  }
+
+  .photo {
+    inline-size: 100%;
+    block-size: auto;
+    aspect-ratio: 270 / 342;
+    object-fit: cover;
+    transition: transform 400ms cubic-bezier(0.2, 0.8, 0.25, 1);
+  }
+
+  .copy {
+    display: grid;
+    place-content: center;
+    min-block-size: 133px;
+    padding: 20px;
+    background-color: var(--color-accent);
+    color: var(--color-surface-cream);
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 1.5;
+    text-align: center;
+  }
+
+  .promo:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 4px;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .promo:hover .photo {
+      transform: scale(1.04);
+    }
+  }
+
+  @media (width >= 768px) {
+    .copy {
+      font-size: 30px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .photo {
+      transition: none;
+    }
+
+    .promo:hover .photo {
+      transform: none;
+    }
+  }
+</style>

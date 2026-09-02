@@ -1,0 +1,149 @@
+---
+import Checkbox from '@/components/checkbox.astro'
+import PriceRange from '@/components/price-range.astro'
+
+const GENDERS = [
+  { value: 'boys', label: 'Мальчики' },
+  { value: 'girls', label: 'Девочки' },
+]
+
+const MATERIALS = [
+  { value: 'synthetic', label: 'Синтетика' },
+  { value: 'cotton', label: 'ХБ' },
+]
+---
+
+<details class="filters">
+  <summary class="toggle">
+    <span>Фильтры</span>
+    <span class="marker" aria-hidden="true"></span>
+  </summary>
+
+  <form class="body" data-catalog-filters>
+    <fieldset class="group">
+      <legend class="legend">Выберите пол</legend>
+      <div class="rows">
+        {
+          GENDERS.map((item) => (
+            <Checkbox name="gender" value={item.value} label={item.label} />
+          ))
+        }
+      </div>
+    </fieldset>
+
+    <fieldset class="group">
+      <legend class="legend">Выберите материал</legend>
+      <div class="rows">
+        {
+          MATERIALS.map((item) => (
+            <Checkbox name="material" value={item.value} label={item.label} />
+          ))
+        }
+      </div>
+    </fieldset>
+
+    <fieldset class="group">
+      <legend class="legend">Цена</legend>
+      <PriceRange />
+    </fieldset>
+  </form>
+</details>
+
+<style>
+  .toggle {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-radius: var(--radius-control);
+    background-color: var(--color-surface-muted);
+    font-weight: 700;
+    font-size: 16px;
+    list-style: none;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .toggle::-webkit-details-marker {
+    display: none;
+  }
+
+  .toggle:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+
+  .marker {
+    position: relative;
+    inline-size: 12px;
+    block-size: 12px;
+  }
+
+  .marker::before,
+  .marker::after {
+    content: '';
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 0;
+    inline-size: 12px;
+    block-size: 2px;
+    border-radius: 1px;
+    background-color: var(--color-text);
+    transition: transform 180ms cubic-bezier(0.2, 0.8, 0.25, 1);
+  }
+
+  .marker::after {
+    transform: rotate(90deg);
+  }
+
+  .filters[open] .marker::after {
+    transform: rotate(180deg);
+  }
+
+  .body {
+    display: grid;
+    gap: 24px;
+    padding-block-start: 24px;
+  }
+
+  .group + .group {
+    padding-block-start: 24px;
+    border-block-start: 1px solid var(--color-surface-muted);
+  }
+
+  .legend {
+    margin-block-end: 20px;
+    font-weight: 700;
+    font-size: 16px;
+  }
+
+  .rows {
+    display: grid;
+    gap: 11px;
+  }
+
+  @media (width >= 1024px) {
+    .toggle {
+      display: none;
+    }
+
+    .filters::details-content {
+      block-size: auto;
+      content-visibility: visible;
+    }
+
+    .body {
+      padding-block-start: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marker::before,
+    .marker::after {
+      transition: none;
+    }
+  }
+</style>

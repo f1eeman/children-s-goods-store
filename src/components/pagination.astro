@@ -1,0 +1,75 @@
+---
+interface Props {
+  label: string
+}
+
+const { label } = Astro.props
+---
+
+<nav class="pagination" aria-label={label} data-catalog-pagination hidden>
+  <div class="row" data-catalog-pagination-row></div>
+</nav>
+
+<style>
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin-block-start: 40px;
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .row :global(.page) {
+    display: grid;
+    place-content: center;
+    min-inline-size: 39px;
+    min-block-size: 39px;
+    padding-inline: 8px;
+    border-radius: var(--radius-block);
+    font-size: 22px;
+    line-height: 1;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    transition:
+      background-color 180ms ease,
+      color 180ms ease;
+  }
+
+  .row :global(.page[aria-current='true']) {
+    background-color: var(--color-label);
+    color: var(--color-text-on-accent);
+  }
+
+  .row :global(.page):focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .row :global(.gap) {
+    display: grid;
+    place-content: center;
+    min-inline-size: 39px;
+    min-block-size: 39px;
+    font-size: 22px;
+    line-height: 1;
+    color: var(--color-text-subtle);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .row :global(.page:not([aria-current='true'])):hover {
+      color: var(--color-accent);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .row :global(.page) {
+      transition: none;
+    }
+  }
+</style>
