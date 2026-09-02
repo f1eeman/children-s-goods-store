@@ -1,0 +1,200 @@
+---
+import type { GetStaticPaths } from 'astro'
+
+import Breadcrumbs, { type Crumb } from '@/components/breadcrumbs.astro'
+import CatalogPromo from '@/components/catalog-promo.astro'
+import Filters from '@/components/filters.astro'
+import Pagination from '@/components/pagination.astro'
+import ProductCard from '@/components/product-card.astro'
+import Select from '@/components/select.astro'
+import {
+  CATEGORIES,
+  ROOT_CATEGORY,
+  categoryBySlug,
+  productsOf,
+} from '@/data/catalog'
+import Layout from '@/layouts/Layout.astro'
+
+export const getStaticPaths = (() => [
+  { params: { category: undefined }, props: { slug: ROOT_CATEGORY.slug } },
+  ...CATEGORIES.map((category) => ({
+    params: { category: category.slug },
+    props: { slug: category.slug },
+  })),
+]) satisfies GetStaticPaths
+
+interface Props {
+  slug: string
+}
+
+const { slug } = Astro.props
+const category = categoryBySlug(slug) ?? ROOT_CATEGORY
+const products = productsOf(slug)
+
+const isRoot = slug === ROOT_CATEGORY.slug
+
+const crumbs: Crumb[] = isRoot
+  ? [{ label: 'Главная', href: '/' }, { label: ROOT_CATEGORY.title }]
+  : [
+      { label: 'Главная', href: '/' },
+      { label: ROOT_CATEGORY.title, href: '/catalog/' },
+      { label: category.title },
+    ]
+
+const SORTS = [
+  { value: 'popular', label: 'По популярности' },
+  { value: 'price-asc', label: 'Сначала дешевле' },
+  { value: 'price-desc', label: 'Сначала дороже' },
+  { value: 'title', label: 'По названию' },
+]
+
+const title = `${category.title} — каталог MERRY`
+const description = `${category.title} для детей в магазине MERRY: ${String(products.length)} товаров, доставка почтой бесплатная при заказе от 5000 рублей.`
+---
+
+<Layout {title} {description}>
+  <section class="section head">
+    <div class="container">
+      <Breadcrumbs {crumbs} />
+
+      <div class="row">
+        <h1 class="title">{category.title}</h1>
+
+        <Select
+          label="Сортировка товаров"
+          options={SORTS}
+          class="sort"
+          data-catalog-sort
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-label={`Товары: ${category.title}`}>
+    <div class="container">
+      <div class="layout" data-catalog>
+        <div class="filters-slot">
+          <Filters />
+        </div>
+
+        <div class="content">
+          <div class="grid" data-catalog-grid>
+            {
+              products.map((product) => (
+                <ProductCard
+                  {product}
+                  sizes="(width >= 1250px) 270px, (width >= 1024px) 30vw, (width >= 600px) 45vw, 90vw"
+                />
+              ))
+            }
+          </div>
+
+          <p class="empty" data-catalog-empty hidden>
+            По выбранным фильтрам товаров нет.
+          </p>
+
+          <Pagination label="Страницы каталога" />
+        </div>
+
+        <aside class="promo-slot" aria-label="Акция каталога">
+          <CatalogPromo />
+        </aside>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  import { initCatalog } from '@/scripts/catalog'
+
+  initCatalog()
+</script>
+
+<style>
+  .head {
+    padding-block-start: 24px;
+  }
+
+  .row {
+    display: grid;
+    gap: 16px;
+    margin-block-start: 16px;
+  }
+
+  .title {
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 1.2;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-areas:
+      'filters'
+      'content'
+      'promo';
+    gap: 30px;
+    margin-block-start: 28px;
+  }
+
+  .filters-slot {
+    grid-area: filters;
+  }
+
+  .content {
+    grid-area: content;
+  }
+
+  .promo-slot {
+    grid-area: promo;
+    inline-size: 100%;
+    max-inline-size: 320px;
+    margin-inline: auto;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 40px 30px;
+  }
+
+  .empty {
+    margin-block-start: 24px;
+    color: var(--color-text-muted);
+  }
+
+  @media (width >= 768px) {
+    .head {
+      padding-block-start: 32px;
+    }
+
+    .row {
+      grid-template-columns: minmax(0, 1fr) 270px;
+      align-items: center;
+    }
+
+    .title {
+      font-size: 30px;
+    }
+
+    .grid {
+      gap: 60px 30px;
+    }
+  }
+
+  @media (width >= 1024px) {
+    .layout {
+      grid-template:
+        'filters content' auto
+        'promo content' 1fr
+        / 270px minmax(0, 1fr);
+      align-content: start;
+      margin-block-start: 40px;
+    }
+
+    .promo-slot {
+      max-inline-size: none;
+      margin-inline: 0;
+    }
+  }
+</style>

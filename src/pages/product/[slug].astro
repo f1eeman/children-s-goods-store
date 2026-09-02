@@ -1,0 +1,271 @@
+---
+import type { GetStaticPaths } from 'astro'
+
+import Banner from '@/components/banner.astro'
+import Breadcrumbs, { type Crumb } from '@/components/breadcrumbs.astro'
+import Button from '@/components/button.astro'
+import Gallery from '@/components/gallery.astro'
+import Params from '@/components/params.astro'
+import ProductStrip from '@/components/product-strip.astro'
+import Quantity from '@/components/quantity.astro'
+import Select from '@/components/select.astro'
+import Timer from '@/components/timer.astro'
+import { DELIVERY_BANNER } from '@/data/banners'
+import {
+  PRODUCTS,
+  RECENT,
+  ROOT_CATEGORY,
+  alsoBought,
+  type Product,
+} from '@/data/catalog'
+import Layout from '@/layouts/Layout.astro'
+
+export const getStaticPaths = (() =>
+  PRODUCTS.map((product) => ({
+    params: { slug: product.slug },
+    props: { product },
+  }))) satisfies GetStaticPaths
+
+interface Props {
+  product: Product
+}
+
+const { product } = Astro.props
+
+const crumbs: Crumb[] = [
+  { label: 'Главная', href: '/' },
+  { label: ROOT_CATEGORY.title, href: '/catalog/' },
+  { label: product.title },
+]
+
+const sizes = product.sizes.map((size) => ({ value: size, label: size }))
+const colors = product.colors.map((color) => ({ value: color, label: color }))
+const also = alsoBought(product.slug)
+const recent = RECENT.filter((item) => item.slug !== product.slug)
+
+const title = `${product.title} — купить в магазине MERRY`
+const description = `${product.title} за ${String(product.price)} ₽ в магазине детских товаров MERRY. ${product.params.map((param) => `${param.label}: ${param.value}`).join('. ')}.`
+---
+
+<Layout {title} {description}>
+  <section class="section head">
+    <div class="container">
+      <Breadcrumbs {crumbs} />
+      <h1 class="title">{product.title}</h1>
+    </div>
+  </section>
+
+  <section class="section" aria-label="О товаре">
+    <div class="container">
+      <div class="layout">
+        <div class="gallery-slot">
+          <Gallery
+            images={[product.image]}
+            alt={product.alt}
+            sale={product.oldPrice !== undefined}
+            gift={product.gift === true}
+          />
+        </div>
+
+        <div class="info">
+          {
+            product.saleEndsAt !== undefined && (
+              <Timer endsAt={product.saleEndsAt} />
+            )
+          }
+
+          <p class="prices">
+            <span class="price">{product.price} ₽</span>
+            {
+              product.oldPrice !== undefined && (
+                <span class="old">{product.oldPrice} ₽</span>
+              )
+            }
+          </p>
+
+          <div class="choices">
+            <div class="choice">
+              <p class="choice-title">Размер</p>
+              <Select
+                label="Размер"
+                options={sizes}
+                placeholder="Выберите товар"
+              />
+            </div>
+
+            <div class="choice">
+              <p class="choice-title">Цвет</p>
+              <Select
+                label="Цвет"
+                options={colors}
+                placeholder="Выберите цвет"
+              />
+            </div>
+          </div>
+
+          <div class="count">
+            <p class="choice-title">Количество</p>
+            <Quantity label="Количество товара" />
+          </div>
+
+          <Button type="button" size="md" class="buy">
+            Положить в корзину
+          </Button>
+        </div>
+
+        <section class="params" aria-labelledby="params-title">
+          <h2 class="params-title" id="params-title">Параметры</h2>
+          <Params params={product.params} />
+        </section>
+      </div>
+    </div>
+  </section>
+
+  {
+    recent.length > 0 && (
+      <ProductStrip
+        id="recent-title"
+        title="Недавно просмотренное"
+        products={recent}
+      />
+    )
+  }
+
+  <section class="section" data-region aria-label="Условия доставки">
+    <div class="container">
+      <Banner banner={DELIVERY_BANNER} />
+    </div>
+  </section>
+
+  <ProductStrip id="also-title" title="С этим покупают" products={also} />
+</Layout>
+
+<style>
+  .head {
+    padding-block-start: 24px;
+  }
+
+  .title {
+    margin-block-start: 16px;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 1.2;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-areas:
+      'gallery'
+      'info'
+      'params';
+    gap: 32px;
+    margin-block-start: 24px;
+  }
+
+  .gallery-slot {
+    grid-area: gallery;
+  }
+
+  .info {
+    display: grid;
+    grid-area: info;
+    gap: 28px;
+    align-content: start;
+  }
+
+  .params {
+    grid-area: params;
+  }
+
+  .params-title {
+    margin-block-end: 20px;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 1.5;
+  }
+
+  .prices {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: baseline;
+  }
+
+  .price {
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 1;
+  }
+
+  .old {
+    position: relative;
+    font-size: 22px;
+    line-height: 1;
+  }
+
+  .old::after {
+    content: '';
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline: -6px;
+    block-size: 1px;
+    background-color: currentcolor;
+    transform: rotate(-11deg);
+  }
+
+  .choices {
+    display: grid;
+    gap: 20px;
+  }
+
+  .choice-title {
+    margin-block-end: 12px;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 1.5;
+  }
+
+  .buy {
+    justify-self: start;
+    min-inline-size: 179px;
+  }
+
+  @media (width >= 480px) {
+    .choices {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (width >= 768px) {
+    .head {
+      padding-block-start: 32px;
+    }
+
+    .title {
+      font-size: 30px;
+    }
+
+    .price {
+      font-size: 60px;
+    }
+
+    .old {
+      font-size: 30px;
+    }
+
+    .layout {
+      margin-block-start: 30px;
+    }
+  }
+
+  @media (width >= 1024px) {
+    .layout {
+      grid-template:
+        'gallery info' auto
+        'params info' 1fr
+        / minmax(0, 600px) minmax(0, 500px);
+      place-content: start space-between;
+      gap: 50px 70px;
+    }
+  }
+</style>

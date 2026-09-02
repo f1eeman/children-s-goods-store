@@ -1,8 +1,9 @@
 ---
 import { Font } from 'astro:assets'
-import Seo from '@/components/seo.astro'
-import Header from '@/components/header.astro'
+
 import Footer from '@/components/footer.astro'
+import Header from '@/components/header.astro'
+import Seo from '@/components/seo.astro'
 
 import '@/styles/index.css'
 
@@ -23,8 +24,8 @@ const { title, description } = Astro.props
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <Seo {title} {description} />
     <Font
-      cssVariable="--font-open-sans"
-      preload={[{ weight: 400 }, { weight: 600 }, { weight: 700 }]}
+      cssVariable="--font-comfortaa"
+      preload={[{ weight: 400 }, { weight: 700 }]}
     />
   </head>
   <body>
@@ -34,13 +35,11 @@ const { title, description } = Astro.props
     </main>
     <Footer />
     <script>
+      import { initCarousel } from '@/scripts/carousel'
       import { initReveal } from '@/scripts/reveal'
-      import { initParallax } from '@/scripts/parallax'
-      import { initRequestForm } from '@/scripts/request-form'
 
+      initCarousel()
       initReveal()
-      initParallax()
-      initRequestForm()
     </script>
   </body>
 </html>
