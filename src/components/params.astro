@@ -1,0 +1,43 @@
+---
+import type { Param } from '@/data/catalog'
+
+interface Props {
+  params: Param[]
+}
+
+const { params } = Astro.props
+---
+
+<dl class="params">
+  {
+    params.map((param) => (
+      <div class="row">
+        <dt class="label">{param.label}</dt>
+        <dd class="value">{param.value}</dd>
+      </div>
+    ))
+  }
+</dl>
+
+<style>
+  .row {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    justify-content: space-between;
+    min-block-size: 50px;
+    border-block-end: 1px solid var(--color-surface-muted);
+  }
+
+  .row:first-child {
+    border-block-start: 1px solid var(--color-surface-muted);
+  }
+
+  .label {
+    color: var(--color-text-params);
+  }
+
+  .value {
+    text-align: end;
+  }
+</style>

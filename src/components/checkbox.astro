@@ -1,0 +1,83 @@
+---
+import Check from '@/img/icons/check.svg'
+
+interface Props {
+  name: string
+  value: string
+  label: string
+  checked?: boolean
+}
+
+const { name, value, label, checked = false } = Astro.props
+---
+
+<label class="row">
+  <input class="visually-hidden" type="checkbox" {name} {value} {checked} />
+  <span class="box" aria-hidden="true">
+    <Check class="tick" />
+  </span>
+  <span class="text">{label}</span>
+</label>
+
+<style>
+  .row {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    min-block-size: 25px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .box {
+    display: grid;
+    flex: none;
+    place-content: center;
+    inline-size: 17px;
+    block-size: 17px;
+    border: 1px solid var(--color-text);
+    border-radius: var(--radius-block);
+    transition:
+      background-color 180ms ease,
+      border-color 180ms ease;
+  }
+
+  .tick {
+    inline-size: 10px;
+    block-size: 9px;
+    opacity: 0;
+    transition: opacity 180ms ease;
+  }
+
+  .text {
+    font-size: 14px;
+  }
+
+  input:checked + .box {
+    border-color: var(--color-accent);
+    background-color: var(--color-accent);
+  }
+
+  input:checked + .box .tick {
+    opacity: 1;
+  }
+
+  input:focus-visible + .box {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .row:hover .box {
+      border-color: var(--color-accent);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .box,
+    .tick {
+      transition: none;
+    }
+  }
+</style>

@@ -1,58 +1,59 @@
 ---
 import type { HTMLAttributes } from 'astro/types'
 
-type Props = HTMLAttributes<'input'>
+type Props = HTMLAttributes<'input'> & {
+  variant?: 'field' | 'muted'
+}
 
-const props = Astro.props
+const { variant = 'field', class: className, ...attrs } = Astro.props
 ---
 
-<input {...props} />
+<input class:list={[`variant-${variant}`, className]} {...attrs} />
 
 <style>
   input {
-    width: 100%;
-    max-width: 100%;
-    height: var(--control-height);
-    padding-inline: 16px;
-    border: 1px solid var(--color-field-border);
-    border-radius: var(--radius-field);
-    background-color: var(--color-field-bg);
+    inline-size: 100%;
+    max-inline-size: 100%;
+    border-radius: var(--radius-control);
     color: var(--color-text);
     transition: border-color 180ms ease;
   }
 
-  input::placeholder {
-    color: var(--color-field-placeholder);
+  .variant-field {
+    block-size: var(--control-height-sm);
+    padding-inline: 20px;
+    border: 1px solid var(--color-border-field);
+    background-color: var(--color-bg);
+    font-size: 12px;
+  }
+
+  .variant-field::placeholder {
+    color: var(--color-accent);
     opacity: 1;
+  }
+
+  .variant-muted {
+    block-size: 41px;
+    padding-inline: 10px;
+    border: 1px solid transparent;
+    background-color: var(--color-surface-muted);
+    text-align: center;
   }
 
   @media (hover: hover) and (pointer: fine) {
     input:hover {
-      border-color: var(--color-field-placeholder);
+      border-color: var(--color-accent);
     }
   }
 
-  input[aria-invalid='true'] {
-    border-color: var(--color-accent);
-  }
-
   input:focus-visible {
-    border-color: var(--color-text);
-    outline: 3px solid color-mix(in srgb, var(--color-text) 12%, transparent);
+    border-color: var(--color-accent);
+    outline: 3px solid color-mix(in srgb, var(--color-accent) 20%, transparent);
     outline-offset: 0;
   }
 
-  input[aria-invalid='true']:focus-visible {
-    border-color: var(--color-accent);
-    outline-color: color-mix(in srgb, var(--color-accent) 20%, transparent);
-  }
-
-  input:active {
-    border-color: var(--color-text);
-  }
-
-  input[aria-invalid='true']:active {
-    border-color: var(--color-accent);
+  input[aria-invalid='true'] {
+    border-color: var(--color-label);
   }
 
   @media (prefers-reduced-motion: reduce) {

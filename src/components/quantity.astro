@@ -1,0 +1,141 @@
+---
+interface Props {
+  label: string
+}
+
+const { label } = Astro.props
+---
+
+<div class="quantity" data-quantity>
+  <button
+    class="step step-minus"
+    type="button"
+    aria-label="Уменьшить количество"
+    data-quantity-minus
+    disabled
+  >
+    <span class="glyph" aria-hidden="true"></span>
+  </button>
+
+  <input
+    class="value"
+    type="number"
+    min="1"
+    max="99"
+    step="1"
+    value="1"
+    inputmode="numeric"
+    aria-label={label}
+    data-quantity-input
+  />
+
+  <button
+    class="step step-plus"
+    type="button"
+    aria-label="Увеличить количество"
+    data-quantity-plus
+  >
+    <span class="glyph" aria-hidden="true"></span>
+  </button>
+</div>
+
+<script>
+  import { initQuantity } from '@/scripts/quantity'
+
+  initQuantity()
+</script>
+
+<style>
+  .quantity {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .step {
+    display: grid;
+    flex: none;
+    place-content: center;
+    inline-size: 33px;
+    block-size: 33px;
+    border: 1px solid var(--color-surface-muted);
+    border-radius: 50%;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    transition:
+      border-color 180ms ease,
+      opacity 180ms ease;
+  }
+
+  .glyph {
+    position: relative;
+    inline-size: 7px;
+    block-size: 7px;
+  }
+
+  .glyph::before,
+  .glyph::after {
+    content: '';
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 0;
+    inline-size: 7px;
+    block-size: 1px;
+    background-color: var(--color-text);
+  }
+
+  .step-plus .glyph::after {
+    transform: rotate(90deg);
+  }
+
+  .step-minus .glyph::after {
+    display: none;
+  }
+
+  .step:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+
+  .step:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .value {
+    inline-size: 67px;
+    block-size: 49px;
+    border: 1px solid var(--color-surface-muted);
+    border-radius: var(--radius-block);
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-weight: 500;
+    font-size: 16px;
+    letter-spacing: 1.92px;
+    text-align: center;
+    appearance: textfield;
+  }
+
+  .value::-webkit-outer-spin-button,
+  .value::-webkit-inner-spin-button {
+    appearance: none;
+    margin: 0;
+  }
+
+  .value:focus-visible {
+    border-color: var(--color-accent);
+    outline: 3px solid color-mix(in srgb, var(--color-accent) 20%, transparent);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .step:not(:disabled):hover {
+      border-color: var(--color-accent);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .step {
+      transition: none;
+    }
+  }
+</style>

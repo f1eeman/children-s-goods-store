@@ -1,0 +1,79 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+
+import ChevronDown from '@/img/icons/chevron-down.svg'
+
+export interface Option {
+  value: string
+  label: string
+}
+
+type Props = HTMLAttributes<'select'> & {
+  options: readonly Option[]
+  placeholder?: string
+  label: string
+}
+
+const { options, placeholder, label, class: className, ...attrs } = Astro.props
+---
+
+<div class:list={['field', className]}>
+  <select aria-label={label} {...attrs}>
+    {placeholder !== undefined && <option value="">{placeholder}</option>}
+    {
+      options.map((option) => (
+        <option value={option.value}>{option.label}</option>
+      ))
+    }
+  </select>
+  <ChevronDown class="chevron" aria-hidden="true" />
+</div>
+
+<style>
+  .field {
+    position: relative;
+    inline-size: 100%;
+  }
+
+  select {
+    inline-size: 100%;
+    block-size: var(--control-height);
+    padding-inline: 15px 45px;
+    border: 1px solid var(--color-surface-muted);
+    border-radius: var(--radius-control);
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-size: 14px;
+    appearance: none;
+    cursor: pointer;
+    transition: border-color 180ms ease;
+  }
+
+  .chevron {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-end: 15px;
+    inline-size: 25px;
+    block-size: 25px;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    select:hover {
+      border-color: var(--color-accent);
+    }
+  }
+
+  select:focus-visible {
+    border-color: var(--color-accent);
+    outline: 3px solid color-mix(in srgb, var(--color-accent) 20%, transparent);
+    outline-offset: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    select {
+      transition: none;
+    }
+  }
+</style>
