@@ -1,87 +1,190 @@
 ---
-const YEAR = new Date().getFullYear()
+/* eslint-disable astro/jsx-a11y/anchor-is-valid -- адресов соцсетей макет не даёт */
+import { FOOTER_COLUMNS } from '@/data/nav'
+import { SITE } from '@/data/site'
+import Facebook from '@/img/icons/social-facebook.svg'
+import Instagram from '@/img/icons/social-instagram.svg'
+import Twitter from '@/img/icons/social-twitter.svg'
+import Vk from '@/img/icons/social-vk.svg'
+import Youtube from '@/img/icons/social-youtube.svg'
 
-const COMPANY = 'Название организации'
-const EMAIL = 'mail@example.invalid'
-const PHONE = { href: '+70000000000', label: '+7 000 000 00 00' }
+const SOCIALS = [
+  { label: 'Facebook', icon: Facebook },
+  { label: 'ВКонтакте', icon: Vk },
+  { label: 'Twitter', icon: Twitter },
+  { label: 'Instagram', icon: Instagram },
+  { label: 'YouTube', icon: Youtube },
+]
 ---
 
 <footer class="footer">
   <div class="container inner">
-    <section class="contacts" id="contacts" aria-labelledby="contacts-title">
-      <h2 class="title" id="contacts-title">Контакты</h2>
+    <section class="column" aria-labelledby="footer-contacts">
+      <h2 class="title" id="footer-contacts">Контакты</h2>
       <ul class="list">
         <li>
-          <a class="link" href={`mailto:${EMAIL}`}>{EMAIL}</a>
+          <a class="link" href={`tel:${SITE.phone.href}`}>{SITE.phone.label}</a>
         </li>
         <li>
-          <a class="link" href={`tel:${PHONE.href}`}>{PHONE.label}</a>
+          <a class="link" href={`mailto:${SITE.email}`}>{SITE.email}</a>
         </li>
       </ul>
     </section>
 
-    <p class="copyright">© {YEAR} {COMPANY}</p>
+    <section class="column" aria-labelledby="footer-socials">
+      <h2 class="title" id="footer-socials">Мы в социальных сетях</h2>
+      <ul class="socials">
+        {
+          SOCIALS.map(({ label, icon: Icon }) => (
+            <li>
+              <a class="social" href="#" aria-label={label}>
+                <Icon class="social-icon" />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="column extra" aria-labelledby="footer-extra">
+      <h2 class="title" id="footer-extra">Дополнительно</h2>
+      <div class="columns">
+        {
+          FOOTER_COLUMNS.map((column) => (
+            <ul class="list">
+              {column.map((link) => (
+                <li>
+                  <a class="link" href={link.href}>
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          ))
+        }
+      </div>
+    </section>
   </div>
 </footer>
 
 <style>
   .footer {
-    padding-block: 40px;
-    background-color: var(--color-surface-inverse);
-    color: var(--color-text-inverse);
+    padding-block: 32px;
+    background-color: var(--color-surface-muted);
   }
 
   .inner {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
+    display: grid;
+    gap: 32px;
   }
 
   .title {
-    font-weight: 600;
-    font-size: 20px;
-    line-height: 24px;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 1.5;
   }
 
   .list {
-    display: flex;
-    flex-direction: column;
+    display: grid;
     gap: 8px;
     margin-block-start: 16px;
+    align-content: start;
   }
 
   .link {
-    color: var(--color-text-inverse-muted);
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
-    transition: color 180ms cubic-bezier(0.2, 0.8, 0.25, 1);
+    transition: color 180ms ease;
+  }
+
+  .socials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-block-start: 16px;
+  }
+
+  .social {
+    display: block;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    transition: transform 180ms cubic-bezier(0.2, 0.8, 0.25, 1);
+  }
+
+  .social-icon {
+    inline-size: 30px;
+    block-size: 30px;
+  }
+
+  .columns {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px 24px;
+  }
+
+  .link:focus-visible,
+  .social:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 4px;
   }
 
   @media (hover: hover) and (pointer: fine) {
     .link:hover {
-      color: var(--color-text-inverse);
+      color: var(--color-accent);
+    }
+
+    .social:hover {
+      transform: translateY(-2px);
     }
   }
 
-  .link:focus-visible {
-    outline: 2px solid var(--color-text-inverse);
-    outline-offset: 3px;
-  }
-
   .link:active {
-    color: var(--color-text-inverse);
-    transition-duration: 90ms;
+    color: var(--color-accent);
   }
 
-  .copyright {
-    color: var(--color-text-inverse-muted);
-    font-size: 14px;
-    line-height: 20px;
+  .social:active {
+    transform: scale(0.94);
+  }
+
+  @media (width >= 768px) {
+    .inner {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 40px;
+    }
+
+    .extra {
+      grid-column: span 2;
+    }
+
+    .columns {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (width >= 1024px) {
+    .footer {
+      padding-block: 50px;
+    }
+
+    .inner {
+      grid-template-columns: 265px 300px minmax(0, 1fr);
+      gap: 40px;
+    }
+
+    .extra {
+      grid-column: auto;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .link {
+    .link,
+    .social {
       transition: none;
+    }
+
+    .social:hover,
+    .social:active {
+      transform: none;
     }
   }
 </style>

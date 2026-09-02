@@ -1,39 +1,106 @@
 ---
-const LINKS = [
-  { href: '#sample', label: 'Раздел' },
-  { href: '#request', label: 'Заявка' },
-  { href: '#contacts', label: 'Контакты' },
-]
+/* eslint-disable astro/jsx-a11y/anchor-is-valid -- корзина и вход ведут в разделы, которых макет не даёт */
+import { MAIN_NAV } from '@/data/nav'
+import { CART, SITE } from '@/data/site'
+import CatalogIcon from '@/img/icons/catalog.svg'
+import Cart from '@/img/icons/cart.svg'
+import Clock from '@/img/icons/clock.svg'
+import Logo from '@/img/icons/logo.svg'
+import Phone from '@/img/icons/phone.svg'
+import Pin from '@/img/icons/pin.svg'
+import User from '@/img/icons/user.svg'
+import Button from '@/components/button.astro'
+import Input from '@/components/input.astro'
 ---
 
 <header class="header">
-  <div class="container row">
-    <a class="logo" href="/">Лендинг</a>
+  <div class="topbar">
+    <div class="container topbar-row">
+      <a class="logo" href="/" aria-label={`${SITE.name} — на главную`}>
+        <Logo class="logo-mark" />
+      </a>
 
-    <details class="menu" data-menu>
-      <summary
-        class="menu-toggle"
-        data-menu-toggle
-        data-menu-label-open="Открыть меню"
-        data-menu-label-close="Закрыть меню"
-      >
-        <span class="visually-hidden" data-menu-label>Открыть меню</span>
-        <span class="burger" aria-hidden="true"></span>
-      </summary>
-      <nav class="nav" aria-label="Разделы страницы">
-        <ul class="nav-list">
-          {
-            LINKS.map((link) => (
-              <li>
-                <a class="nav-link" href={link.href}>
-                  {link.label}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </nav>
-    </details>
+      <ul class="facts">
+        <li class="fact fact-address">
+          <Pin class="fact-icon" aria-hidden="true" />
+          <span>{SITE.address}</span>
+        </li>
+        <li class="fact fact-hours">
+          <Clock class="fact-icon" aria-hidden="true" />
+          <span>{SITE.hours}</span>
+        </li>
+        <li class="fact">
+          <Phone class="fact-icon" aria-hidden="true" />
+          <a class="fact-link" href={`tel:${SITE.phone.href}`}>
+            {SITE.phone.label}
+          </a>
+        </li>
+      </ul>
+
+      <div class="account">
+        <a class="cart" href="#">
+          <span class="cart-icon">
+            <Cart aria-hidden="true" />
+            <span class="badge">{CART.count}</span>
+          </span>
+          <span class="cart-text">
+            <span class="cart-caption">Сумма заказа:</span>
+            <span class="cart-total"><b>{CART.total} </b>₽</span>
+          </span>
+        </a>
+
+        <a class="login" href="#">
+          <User class="login-icon" aria-hidden="true" />
+          <span>Войти</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="navbar">
+    <div class="container navbar-row">
+      <details class="menu" data-menu>
+        <summary
+          class="menu-toggle"
+          data-menu-toggle
+          data-menu-label-open="Открыть меню"
+          data-menu-label-close="Закрыть меню"
+        >
+          <span class="visually-hidden" data-menu-label>Открыть меню</span>
+          <span class="burger" aria-hidden="true"></span>
+        </summary>
+
+        <nav class="nav" aria-label="Разделы каталога">
+          <ul class="nav-list">
+            {
+              MAIN_NAV.map((link) => (
+                <li>
+                  <a class="nav-link" href={link.href}>
+                    {link.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </details>
+
+      <Button as="a" href="/catalog/" class="catalog">
+        <CatalogIcon class="catalog-icon" aria-hidden="true" />
+        Каталог
+      </Button>
+
+      <form class="search" role="search" action="/catalog/">
+        <Input
+          type="search"
+          name="q"
+          class="search-input"
+          placeholder="Искать товар на сайте"
+          aria-label="Искать товар на сайте"
+        />
+        <Button type="submit" class="search-submit">Найти</Button>
+      </form>
+    </div>
   </div>
 </header>
 
@@ -47,36 +114,182 @@ const LINKS = [
   .header {
     position: relative;
     z-index: 1;
-    padding-block: 16px;
   }
 
-  .row {
+  .topbar {
+    background-color: var(--color-surface-muted);
+  }
+
+  .topbar-row {
     display: flex;
-    gap: 12px;
+    gap: 16px;
     align-items: center;
-    min-block-size: 36px;
+    justify-content: space-between;
+    min-block-size: 56px;
+    padding-block: 8px;
   }
 
-  .logo {
-    flex: none;
-    margin-inline-end: auto;
+  .logo-mark {
+    inline-size: 94px;
+    block-size: 26px;
+  }
+
+  .facts {
+    display: flex;
+    gap: 16px;
+    align-items: center;
     font-weight: 700;
-    font-size: 20px;
-    line-height: 36px;
+    font-size: 12px;
+    line-height: 1.25;
+    white-space: nowrap;
   }
 
-  .nav-link {
-    display: block;
-    font-size: 14px;
-    white-space: nowrap;
-    user-select: none;
+  .fact {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .fact-address,
+  .fact-hours {
+    display: none;
+  }
+
+  .fact-icon {
+    flex: none;
+    inline-size: 14px;
+    block-size: 15px;
+  }
+
+  .fact-link,
+  .cart,
+  .login {
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
-    transition: color 180ms cubic-bezier(0.2, 0.8, 0.25, 1);
+    transition: color 180ms ease;
+  }
+
+  .account {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 1.25;
+    white-space: nowrap;
+  }
+
+  .cart {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .cart-icon {
+    position: relative;
+    flex: none;
+    inline-size: 20px;
+    block-size: 20px;
+  }
+
+  .badge {
+    position: absolute;
+    inset-block-end: -2px;
+    inset-inline-end: -4px;
+    display: grid;
+    place-content: center;
+    inline-size: 13px;
+    block-size: 13px;
+    border-radius: 50%;
+    background-color: var(--color-text);
+    color: var(--color-text-on-accent);
+    font-size: 9px;
+    line-height: 1;
+  }
+
+  .cart-text {
+    display: none;
+  }
+
+  .cart-caption {
+    display: block;
+    font-weight: 400;
+  }
+
+  .cart-total b {
+    font-weight: 700;
+  }
+
+  .login {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .login-icon {
+    flex: none;
+    inline-size: 17px;
+    block-size: 16px;
+  }
+
+  .login span {
+    display: none;
+  }
+
+  .navbar-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    padding-block: 12px;
+  }
+
+  .catalog {
+    order: 1;
+    min-block-size: 37px;
+  }
+
+  .catalog-icon {
+    inline-size: 16px;
+    block-size: 13px;
+  }
+
+  .search {
+    order: 3;
+    display: flex;
+    flex-basis: 100%;
+    gap: 8px;
+  }
+
+  .search-input {
+    flex: 1;
+  }
+
+  .fact-link:focus-visible,
+  .cart:focus-visible,
+  .login:focus-visible,
+  .nav-link:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 4px;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .fact-link:hover,
+    .cart:hover,
+    .login:hover {
+      color: var(--color-accent);
+    }
+  }
+
+  .fact-link:active,
+  .cart:active,
+  .login:active {
+    color: var(--color-accent);
   }
 
   @media (width < 1024px) {
     .menu {
+      order: 0;
       flex: none;
     }
 
@@ -84,27 +297,20 @@ const LINKS = [
       position: relative;
       display: grid;
       place-content: center;
-      inline-size: 36px;
-      block-size: 36px;
-      border: 1px solid var(--color-border-chip);
+      inline-size: 37px;
+      block-size: 37px;
       border-radius: var(--radius-control);
-      background-color: var(--color-surface-chip);
+      background-color: var(--color-surface-muted);
       list-style: none;
       cursor: pointer;
       user-select: none;
       -webkit-tap-highlight-color: transparent;
       touch-action: manipulation;
-      transition: background-color 180ms cubic-bezier(0.2, 0.8, 0.25, 1);
+      transition: background-color 180ms ease;
     }
 
     .menu-toggle::-webkit-details-marker {
       display: none;
-    }
-
-    .menu-toggle::after {
-      content: '';
-      position: absolute;
-      inset: -4px;
     }
 
     .menu-toggle:focus-visible {
@@ -115,22 +321,18 @@ const LINKS = [
     .menu-toggle:active {
       background-color: color-mix(
         in srgb,
-        var(--color-surface-chip) 86%,
-        var(--color-text)
+        var(--color-surface-muted) 86%,
+        var(--color-accent)
       );
-      transition-duration: 90ms;
     }
 
     .burger,
     .burger::before,
     .burger::after {
-      inline-size: 20px;
-      block-size: 2px;
-      border-radius: 1px;
+      inline-size: 16px;
+      block-size: 1px;
       background-color: var(--color-text);
-      transition:
-        transform 180ms cubic-bezier(0.2, 0.8, 0.25, 1),
-        background-color 180ms cubic-bezier(0.2, 0.8, 0.25, 1);
+      transition: transform 180ms cubic-bezier(0.2, 0.8, 0.25, 1);
     }
 
     .burger {
@@ -150,20 +352,6 @@ const LINKS = [
 
     .burger::after {
       inset-block-start: 6px;
-    }
-
-    @media (hover: hover) and (pointer: fine) {
-      .menu-toggle:hover {
-        background-color: color-mix(
-          in srgb,
-          var(--color-surface-chip) 92%,
-          var(--color-text)
-        );
-      }
-
-      .menu[open] .menu-toggle:hover .burger {
-        background-color: transparent;
-      }
     }
 
     .menu[open] .burger {
@@ -188,9 +376,10 @@ const LINKS = [
       inset-block-start: 100%;
       z-index: 10;
       block-size: 0;
-      border-end-end-radius: var(--radius-tab);
-      border-end-start-radius: var(--radius-tab);
-      background-color: var(--color-surface-inverse);
+      border-end-end-radius: var(--radius-block);
+      border-end-start-radius: var(--radius-block);
+      background-color: var(--color-surface-muted);
+      box-shadow: var(--shadow-card);
       overflow: hidden;
       transition: block-size 180ms cubic-bezier(0.2, 0.8, 0.25, 1);
     }
@@ -200,38 +389,76 @@ const LINKS = [
     }
 
     .nav-list {
-      max-block-size: calc(100dvh - var(--header-height));
-      padding: 8px 16px 16px;
+      max-block-size: 70dvh;
+      padding: 8px var(--layout-gutter) 16px;
       overflow-y: auto;
     }
 
     .nav-link {
+      display: block;
       padding-block: 10px;
-      padding-inline: 8px;
-      border-radius: var(--radius-control);
-      color: var(--color-text-inverse-muted);
-      transition-property: color, background-color;
+      font-weight: 700;
+      font-size: 14px;
+      transition: color 180ms ease;
     }
 
     @media (hover: hover) and (pointer: fine) {
       .nav-link:hover {
-        color: var(--color-text-inverse);
+        color: var(--color-accent);
       }
     }
 
     .nav-link:active {
-      background-color: var(--color-surface-glass);
-      color: var(--color-text-inverse);
+      color: var(--color-accent);
+    }
+  }
+
+  @media (width >= 480px) {
+    .login span {
+      display: block;
+    }
+  }
+
+  @media (width >= 768px) {
+    .fact-hours {
+      display: flex;
+    }
+
+    .cart-text {
+      display: block;
+      text-align: start;
+    }
+
+    .search {
+      order: 2;
+      flex: 1;
+      flex-basis: auto;
+      max-inline-size: 309px;
+      margin-inline-start: auto;
     }
   }
 
   @media (width >= 1024px) {
-    .menu {
-      flex: 1;
+    .topbar-row {
+      min-block-size: 67px;
+      padding-block: 0;
+    }
+
+    .facts {
+      gap: 20px;
+    }
+
+    .fact-hours {
+      display: flex;
     }
 
     .menu-toggle {
       display: none;
+    }
+
+    .menu {
+      order: 2;
+      flex: 1;
     }
 
     .menu::details-content {
@@ -241,14 +468,18 @@ const LINKS = [
 
     .nav-list {
       display: flex;
-      gap: 32px;
-      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
     }
 
     .nav-link {
       position: relative;
-      color: var(--color-text-muted);
-      transition-property: color, transform;
+      display: block;
+      font-weight: 700;
+      font-size: 14px;
+      white-space: nowrap;
+      transition: color 180ms ease;
     }
 
     .nav-link::after {
@@ -256,33 +487,42 @@ const LINKS = [
       position: absolute;
       inset-block-end: -4px;
       inset-inline: 0;
-      block-size: 2px;
-      border-radius: 1px;
+      block-size: 1px;
       background-color: currentcolor;
       transform: scaleX(0);
       transform-origin: right;
       transition: transform 180ms cubic-bezier(0.2, 0.8, 0.25, 1);
     }
 
-    .nav-link:focus-visible {
-      outline: 2px solid var(--color-accent);
-      outline-offset: 4px;
-    }
-
-    .nav-link:active {
-      color: var(--color-text);
-      transform: scale(0.97);
-    }
-
     @media (hover: hover) and (pointer: fine) {
       .nav-link:hover {
-        color: var(--color-text);
+        color: var(--color-accent);
       }
 
       .nav-link:hover::after {
         transform: scaleX(1);
         transform-origin: left;
       }
+    }
+
+    .nav-link:active {
+      color: var(--color-accent);
+    }
+
+    .search {
+      order: 3;
+      margin-inline-start: 0;
+    }
+
+    .navbar-row {
+      gap: 28px;
+      padding-block: 15px 20px;
+    }
+  }
+
+  @media (width >= 1250px) {
+    .fact-address {
+      display: flex;
     }
   }
 
@@ -294,12 +534,11 @@ const LINKS = [
     .burger,
     .burger::before,
     .burger::after,
-    .menu::details-content {
+    .menu::details-content,
+    .fact-link,
+    .cart,
+    .login {
       transition: none;
-    }
-
-    .nav-link:active {
-      transform: none;
     }
   }
 </style>

@@ -1,0 +1,73 @@
+---
+export interface Crumb {
+  label: string
+  href?: string
+}
+
+interface Props {
+  crumbs: Crumb[]
+}
+
+const { crumbs } = Astro.props
+---
+
+<nav class="crumbs" aria-label="Хлебные крошки">
+  <ol class="list">
+    {
+      crumbs.map((crumb, index) => (
+        <li class="item">
+          {crumb.href === undefined ? (
+            <span class="current" aria-current="page">
+              {crumb.label}
+            </span>
+          ) : (
+            <a class="link" href={crumb.href}>
+              {crumb.label}
+            </a>
+          )}
+          {index < crumbs.length - 1 && <span class="sep">/</span>}
+        </li>
+      ))
+    }
+  </ol>
+</nav>
+
+<style>
+  .list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    font-size: 14px;
+    line-height: 1.2;
+  }
+
+  .item {
+    display: flex;
+    gap: 4px;
+  }
+
+  .current {
+    color: var(--color-text-subtle);
+  }
+
+  .link {
+    transition: color 180ms ease;
+  }
+
+  .link:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .link:hover {
+      color: var(--color-accent);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .link {
+      transition: none;
+    }
+  }
+</style>
