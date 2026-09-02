@@ -67,3 +67,11 @@ button {
 li {
   list-style: none;
 }
+
+fieldset {
+  border: none;
+}
+
+legend {
+  padding: 0;
+}

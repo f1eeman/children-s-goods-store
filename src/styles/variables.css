@@ -1,41 +1,44 @@
 :root {
   --color-bg: #fff;
+  --color-surface-muted: #f5f2f8;
   --color-surface-card: #fff;
-  --color-surface-inverse: #202020;
-  --color-surface-chip: #f4f4f4;
-  --color-surface-glass: rgb(255 255 255 / 5%);
-  --color-border-chip: #e8e8e8;
-  --color-border-glass: rgb(255 255 255 / 10%);
-  --color-divider: #d7d7d7;
-  --color-accent: #2c2c2c;
-  --color-success: #219653;
-  --color-text: #2c2c2c;
-  --color-text-muted: #666;
+  --color-surface-contacts: #faf9f8;
+  --color-surface-gallery: #fafaf9;
+  --color-border-field: #f1eef9;
+  --color-accent: #8b48cf;
+  --color-label: #f9ba4f;
+  --color-text: #120044;
+  --color-text-muted: rgb(18 0 68 / 70%);
+  --color-text-subtle: rgb(18 0 68 / 50%);
+  --color-text-faint: rgb(18 0 68 / 25%);
   --color-text-on-accent: #fff;
-  --color-text-inverse: #efefef;
-  --color-text-inverse-muted: #8b8888;
-  --color-field-bg: #fff;
-  --color-field-border: #dbdbdb;
-  --color-field-placeholder: #b2b6bf;
-  --radius-field: 4px;
-  --radius-control: 8px;
-  --radius-tab: 24px;
-  --radius-block: 32px;
-  --radius-pill: 40px;
-  --shadow-card: 0 4px 12px rgb(0 0 0 / 7%);
-  --shadow-card-soft: 0 4px 24px rgb(0 0 0 / 7%);
-  --shadow-accent: 0 4px 8px rgb(0 0 0 / 12%);
-  --control-height: 48px;
-  --header-height: 72px;
-  --layout-width: 1296px;
-  --layout-gutter: clamp(16px, 5vw, 72px);
-  --block-gap: 40px;
+  --color-text-params: #4e372a;
+  --color-banner-bg: #fbf7f2;
+  --color-surface-cream: #fcf3ec;
+  --color-banner-shape: #8c48cf;
+  --color-banner-shape-soft: #d5bcf5;
+  --color-watermark: rgb(245 242 248 / 50%);
+  --radius-control: 3px;
+  --radius-block: 5px;
+  --radius-pill: 50px;
+  --shadow-card: 0 4px 20px rgb(78 55 42 / 20%);
+  --control-height-sm: 33px;
+  --control-height: 40px;
+  --layout-width: 1170px;
+  --layout-gutter: clamp(16px, 4vw, 40px);
+  --block-gap: 32px;
   --region-gap: 56px;
+}
+
+@media (width >= 768px) {
+  :root {
+    --block-gap: 40px;
+    --region-gap: 88px;
+  }
 }
 
 @media (width >= 1024px) {
   :root {
     --region-gap: 120px;
-    --header-height: 88px;
   }
 }
