@@ -1,0 +1,142 @@
+---
+import { Image } from 'astro:assets'
+
+import Carousel from '@/components/carousel.astro'
+import { CATEGORIES } from '@/data/catalog'
+import ArrowSmall from '@/img/icons/arrow-small.svg'
+---
+
+<section class="section" data-region aria-labelledby="categories-title">
+  <div class="container inner">
+    <span class="watermark" aria-hidden="true">Поиск</span>
+
+    <h2 class="section-title" id="categories-title">Поиск по категориям</h2>
+
+    <Carousel label="Категории каталога" variant="tiles" dots class="strip">
+      {
+        CATEGORIES.map((category) => (
+          <a class="tile" href={`/catalog/${category.slug}/`}>
+            <span class="shot">
+              {category.image !== undefined && (
+                <Image
+                  class="photo"
+                  src={category.image}
+                  alt=""
+                  widths={[215, 430]}
+                  sizes="(width >= 768px) 215px, 60vw"
+                  loading="lazy"
+                />
+              )}
+            </span>
+            <span class="row">
+              <span class="label">{category.title}</span>
+              <ArrowSmall class="mini" aria-hidden="true" />
+            </span>
+          </a>
+        ))
+      }
+    </Carousel>
+  </div>
+</section>
+
+<style>
+  .inner {
+    position: relative;
+  }
+
+  .watermark {
+    position: absolute;
+    inset-block-start: -12px;
+    inset-inline-start: var(--layout-gutter);
+    z-index: -1;
+    color: var(--color-watermark);
+    font-weight: 700;
+    font-size: clamp(48px, 9vw, 100px);
+    line-height: 1;
+    letter-spacing: 12px;
+    text-transform: uppercase;
+    user-select: none;
+  }
+
+  .strip {
+    margin-block-start: 28px;
+  }
+
+  .tile {
+    display: block;
+  }
+
+  .shot {
+    display: block;
+    border-radius: var(--radius-block);
+    overflow: hidden;
+  }
+
+  .photo {
+    inline-size: 100%;
+    block-size: auto;
+    aspect-ratio: 215 / 244;
+    object-fit: cover;
+    transition: transform 400ms cubic-bezier(0.2, 0.8, 0.25, 1);
+  }
+
+  .row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+    margin-block-start: 20px;
+  }
+
+  .label {
+    font-size: 18px;
+  }
+
+  .mini {
+    flex: none;
+    inline-size: 23px;
+    block-size: 23px;
+    transform: rotate(180deg);
+    transition: transform 180ms cubic-bezier(0.2, 0.8, 0.25, 1);
+  }
+
+  .tile:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 4px;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .tile:hover .photo {
+      transform: scale(1.04);
+    }
+
+    .tile:hover .label {
+      color: var(--color-accent);
+    }
+
+    .tile:hover .mini {
+      transform: rotate(180deg) translateX(-4px);
+    }
+  }
+
+  @media (width >= 768px) {
+    .strip {
+      margin-block-start: 40px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .photo,
+    .mini {
+      transition: none;
+    }
+
+    .tile:hover .photo {
+      transform: none;
+    }
+
+    .tile:hover .mini {
+      transform: rotate(180deg);
+    }
+  }
+</style>

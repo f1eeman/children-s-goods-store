@@ -1,0 +1,93 @@
+---
+import Certified from '@/img/icons/advantage-certified.svg'
+import Delivery from '@/img/icons/advantage-delivery.svg'
+import Design from '@/img/icons/advantage-design.svg'
+import Geo from '@/img/icons/advantage-geo.svg'
+
+const ADVANTAGES = [
+  { label: 'Уникальный дизайн', icon: Design },
+  { label: 'Быстрая доставка', icon: Delivery },
+  { label: 'Товар сертифицирован', icon: Certified },
+  { label: 'Работаем по России и СНГ', icon: Geo },
+]
+---
+
+<section class="section" data-region aria-labelledby="advantages-title">
+  <div class="container">
+    <h2 class="section-title" id="advantages-title">
+      Преимущества работы с нами
+    </h2>
+
+    <ul class="list">
+      {
+        ADVANTAGES.map(({ label, icon: Icon }) => (
+          <li class="item">
+            <span class="art">
+              <Icon class="illustration" />
+            </span>
+            <span class="label">{label}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 32px 16px;
+    margin-block-start: 28px;
+  }
+
+  .item {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .art {
+    position: relative;
+    display: grid;
+    place-items: center;
+    inline-size: 150px;
+    max-inline-size: 100%;
+    block-size: 97px;
+  }
+
+  .art::after {
+    content: '';
+    position: absolute;
+    inset-block-end: 4px;
+    inline-size: 41px;
+    block-size: 4px;
+    border-radius: 50%;
+    background-color: #e0dcd7;
+  }
+
+  .illustration {
+    position: relative;
+    z-index: 1;
+    inline-size: auto;
+    max-inline-size: 100%;
+    block-size: 100%;
+  }
+
+  .label {
+    max-inline-size: 145px;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 1.5;
+    text-align: center;
+  }
+
+  @media (width >= 768px) {
+    .list {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 24px;
+      margin-block-start: 40px;
+    }
+  }
+</style>

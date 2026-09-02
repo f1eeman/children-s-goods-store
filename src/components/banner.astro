@@ -1,0 +1,137 @@
+---
+import { Image } from 'astro:assets'
+
+import Button from '@/components/button.astro'
+import type { Banner } from '@/data/banners'
+
+interface Props {
+  banner: Banner
+}
+
+const { banner } = Astro.props
+---
+
+<div class="banner" data-reveal>
+  <div class="art">
+    <Image
+      class="photo"
+      src={banner.image}
+      alt={banner.alt}
+      widths={[768, 1170, 1400]}
+      sizes="(width >= 1250px) 1170px, 100vw"
+      loading="lazy"
+    />
+  </div>
+
+  <span class="shape shape-soft" aria-hidden="true"></span>
+  <span class="shape shape-main" aria-hidden="true"></span>
+
+  <div class="copy">
+    <p class="title">{banner.title}</p>
+    <Button as="a" href={banner.href} variant="light-ink" class="cta">
+      {banner.cta}
+    </Button>
+  </div>
+</div>
+
+<style>
+  .banner {
+    position: relative;
+    border-radius: var(--radius-block);
+    background-color: var(--color-banner-bg);
+    overflow: hidden;
+  }
+
+  .photo {
+    inline-size: 100%;
+    block-size: 100%;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+  }
+
+  .shape {
+    display: none;
+  }
+
+  .copy {
+    padding: 24px 20px 28px;
+    background-color: var(--color-banner-shape);
+  }
+
+  .title {
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 1.5;
+    color: var(--color-text-on-accent);
+  }
+
+  .cta {
+    align-self: start;
+    margin-block-start: 20px;
+    min-inline-size: 111px;
+  }
+
+  @media (width >= 768px) {
+    .banner {
+      display: grid;
+      grid-template-columns: 46% minmax(0, 1fr);
+      min-block-size: 220px;
+    }
+
+    .art {
+      position: absolute;
+      inset: 0;
+    }
+
+    .photo {
+      aspect-ratio: auto;
+    }
+
+    .shape {
+      position: absolute;
+      display: block;
+      inset-block-start: 0;
+      inset-inline-start: 0;
+      inline-size: 67.4%;
+      border-radius: 50%;
+      aspect-ratio: 789 / 662.664;
+    }
+
+    .shape-soft {
+      translate: -10.5% -19.2%;
+      background-color: var(--color-banner-shape-soft);
+    }
+
+    .shape-main {
+      translate: -17.5% -21.4%;
+      background-color: var(--color-banner-shape);
+    }
+
+    .copy {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      grid-column: 1;
+      justify-content: center;
+      padding: 24px 20px 24px 8.5%;
+      background-color: transparent;
+    }
+
+    .title {
+      max-inline-size: 451px;
+      font-size: 24px;
+    }
+  }
+
+  @media (width >= 1024px) {
+    .banner {
+      grid-template-columns: 44% minmax(0, 1fr);
+      min-block-size: 255px;
+    }
+
+    .title {
+      font-size: 30px;
+    }
+  }
+</style>

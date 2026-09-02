@@ -1,0 +1,115 @@
+---
+interface Props {
+  endsAt: string
+}
+
+const { endsAt } = Astro.props
+
+const MINUTE = 60_000
+const HOUR = 60 * MINUTE
+const DAY = 24 * HOUR
+
+const left = Math.max(0, new Date(endsAt).getTime() - Date.now())
+
+const pad = (value: number): string => String(value).padStart(2, '0')
+
+const parts = [
+  { key: 'days', label: 'Дни', value: pad(Math.floor(left / DAY)) },
+  { key: 'hours', label: 'Часы', value: pad(Math.floor((left % DAY) / HOUR)) },
+  {
+    key: 'minutes',
+    label: 'Минуты',
+    value: pad(Math.floor((left % HOUR) / MINUTE)),
+  },
+]
+---
+
+<div class="timer" data-timer data-timer-ends={endsAt}>
+  <p class="caption">До конца акции осталось:</p>
+
+  <div class="cells">
+    {
+      parts.map((part, index) => (
+        <>
+          {index > 0 && (
+            <span class="colon" aria-hidden="true">
+              :
+            </span>
+          )}
+          <div class="cell">
+            <span class="value" data-timer-value={part.key}>
+              {part.value}
+            </span>
+            <span class="label">{part.label}</span>
+          </div>
+        </>
+      ))
+    }
+  </div>
+</div>
+
+<script>
+  import { initTimer } from '@/scripts/timer'
+
+  initTimer()
+</script>
+
+<style>
+  .caption {
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 1.5;
+  }
+
+  .cells {
+    display: flex;
+    gap: 4px;
+    align-items: start;
+    margin-block-start: 15px;
+  }
+
+  .cell {
+    display: grid;
+    justify-items: center;
+  }
+
+  .value {
+    display: grid;
+    place-content: center;
+    inline-size: 72px;
+    block-size: 50px;
+    border-radius: var(--radius-block);
+    background-color: var(--color-surface-muted);
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 1;
+    letter-spacing: 1.8px;
+  }
+
+  .label {
+    margin-block-start: 15px;
+    color: var(--color-text-faint);
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 1;
+  }
+
+  .colon {
+    align-self: center;
+    inline-size: 16px;
+    margin-block-end: 30px;
+    font-weight: 700;
+    font-size: 15px;
+    text-align: center;
+  }
+
+  @media (width >= 480px) {
+    .cells {
+      gap: 8px;
+    }
+
+    .value {
+      inline-size: 80px;
+    }
+  }
+</style>

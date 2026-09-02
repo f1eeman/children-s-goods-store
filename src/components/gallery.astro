@@ -1,0 +1,191 @@
+---
+import { Image } from 'astro:assets'
+import type { ImageMetadata } from 'astro'
+
+import LabelChip from '@/components/label-chip.astro'
+import ArrowMini from '@/img/icons/arrow-mini.svg'
+
+interface Props {
+  images: ImageMetadata[]
+  alt: string
+  sale?: boolean
+  gift?: boolean
+}
+
+const { images, alt, sale = false, gift = false } = Astro.props
+---
+
+<div class="gallery" data-carousel>
+  <div class="frame">
+    <button
+      class="nav nav-prev"
+      type="button"
+      aria-label="Предыдущее фото"
+      disabled
+      data-carousel-prev
+    >
+      <ArrowMini class="chevron" aria-hidden="true" />
+    </button>
+
+    <div
+      class="viewport"
+      data-carousel-viewport
+      tabindex="0"
+      role="group"
+      aria-label="Фотографии товара"
+    >
+      <div class="track">
+        {
+          images.map((image, index) => (
+            <div class="slide">
+              <Image
+                class="photo"
+                src={image}
+                alt={index === 0 ? alt : ''}
+                widths={[600, 1200]}
+                sizes="(width >= 1024px) 600px, 92vw"
+                loading={index === 0 ? 'eager' : 'lazy'}
+              />
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <button
+      class="nav nav-next"
+      type="button"
+      aria-label="Следующее фото"
+      disabled
+      data-carousel-next
+    >
+      <ArrowMini class="chevron" aria-hidden="true" />
+    </button>
+
+    {
+      (sale || gift) && (
+        <span class="labels">
+          {sale && <LabelChip>sale</LabelChip>}
+          {gift && <LabelChip>подарок</LabelChip>}
+        </span>
+      )
+    }
+  </div>
+
+  <div class="dots" data-carousel-dots hidden>
+    <div class="dots-row" data-carousel-dots-row></div>
+  </div>
+</div>
+
+<style>
+  .frame {
+    position: relative;
+    border-radius: var(--radius-block);
+    background-color: var(--color-surface-gallery);
+    overflow: hidden;
+  }
+
+  .viewport {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .viewport::-webkit-scrollbar {
+    display: none;
+  }
+
+  .viewport:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: -2px;
+  }
+
+  .track {
+    display: flex;
+  }
+
+  .slide {
+    flex: 0 0 100%;
+    scroll-snap-align: start;
+  }
+
+  .photo {
+    inline-size: 100%;
+    block-size: 100%;
+    aspect-ratio: 600 / 621;
+    object-fit: contain;
+    padding: 24px;
+  }
+
+  .labels {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    display: flex;
+    gap: 15px;
+  }
+
+  .nav {
+    position: absolute;
+    inset-block-start: 50%;
+    z-index: 1;
+    display: grid;
+    place-content: center;
+    inline-size: 40px;
+    block-size: 40px;
+    transform: translateY(-50%);
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    transition: opacity 180ms ease;
+  }
+
+  .nav-prev {
+    inset-inline-start: 4px;
+  }
+
+  .nav-next {
+    inset-inline-end: 4px;
+  }
+
+  .nav:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+
+  .nav:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .chevron {
+    inline-size: 10px;
+    block-size: 10px;
+  }
+
+  .nav-prev .chevron {
+    transform: rotate(135deg);
+  }
+
+  .nav-next .chevron {
+    transform: rotate(-45deg);
+  }
+
+  .dots {
+    display: flex;
+    justify-content: center;
+    margin-block-start: 15px;
+  }
+
+  .dots-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nav {
+      transition: none;
+    }
+  }
+</style>
