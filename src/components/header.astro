@@ -148,6 +148,13 @@ import Input from '@/components/input.astro'
     display: flex;
     gap: 10px;
     align-items: center;
+    min-block-size: 40px;
+  }
+
+  .cart,
+  .login {
+    justify-content: center;
+    min-inline-size: 40px;
   }
 
   .fact-address,
@@ -161,9 +168,15 @@ import Input from '@/components/input.astro'
     block-size: 15px;
   }
 
+  .fact-link {
+    display: inline-flex;
+    align-items: center;
+  }
+
   .fact-link,
   .cart,
   .login {
+    min-block-size: 40px;
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
     transition: color 180ms ease;

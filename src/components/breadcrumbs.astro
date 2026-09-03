@@ -41,6 +41,7 @@ const { crumbs } = Astro.props
   .item {
     display: flex;
     gap: 4px;
+    align-items: center;
   }
 
   .current {
@@ -48,6 +49,9 @@ const { crumbs } = Astro.props
   }
 
   .link {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: 24px;
     transition: color 180ms ease;
   }
 
