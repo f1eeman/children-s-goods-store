@@ -107,3 +107,16 @@ input[type='radio'].visually-hidden {
     transition: none;
   }
 }
+
+h1,
+h2,
+h3 {
+  text-wrap-style: balance;
+}
+
+p,
+li,
+dd,
+figcaption {
+  text-wrap-style: pretty;
+}
