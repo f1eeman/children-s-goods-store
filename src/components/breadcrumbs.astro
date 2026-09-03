@@ -13,6 +13,11 @@ const { crumbs } = Astro.props
     {
       crumbs.map((crumb, index) => (
         <li class="item">
+          {index > 0 && (
+            <span class="sep" aria-hidden="true">
+              /
+            </span>
+          )}
           {crumb.href === undefined ? (
             <span class="current" aria-current="page">
               {crumb.label}
@@ -22,7 +27,6 @@ const { crumbs } = Astro.props
               {crumb.label}
             </a>
           )}
-          {index < crumbs.length - 1 && <span class="sep">/</span>}
         </li>
       ))
     }
@@ -42,10 +46,15 @@ const { crumbs } = Astro.props
     display: flex;
     gap: 4px;
     align-items: center;
+    min-inline-size: 0;
   }
 
   .current {
+    min-inline-size: 0;
     color: var(--color-text-subtle);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .link {

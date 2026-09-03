@@ -43,8 +43,8 @@ const title = `${post.title} — новости MERRY`
           class="photo"
           src={post.image}
           alt=""
-          widths={[768, 1170]}
-          sizes="(width >= 1250px) 1170px, 100vw"
+          widths={[360, 768, 1170]}
+          sizes="(width >= 1250px) 1170px, (width >= 768px) 92vw, 90vw"
           loading="eager"
         />
       </div>
@@ -77,7 +77,7 @@ const title = `${post.title} — новости MERRY`
   }
 
   .shot {
-    margin-block-start: 20px;
+    margin-block-start: 40px;
     border-radius: var(--radius-block);
     overflow: hidden;
   }
@@ -85,8 +85,9 @@ const title = `${post.title} — новости MERRY`
   .photo {
     inline-size: 100%;
     block-size: auto;
-    aspect-ratio: 1170 / 500;
+    aspect-ratio: 3 / 2;
     object-fit: cover;
+    object-position: 50% 25%;
   }
 
   .body {
@@ -134,6 +135,10 @@ const title = `${post.title} — новости MERRY`
   @media (width >= 768px) {
     .heading {
       font-size: 20px;
+    }
+
+    .photo {
+      aspect-ratio: 1170 / 500;
     }
   }
 

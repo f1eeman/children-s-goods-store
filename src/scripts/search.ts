@@ -28,7 +28,11 @@ export function initSearch(): void {
 
   if (words.length === 0) {
     if (blank !== null) blank.hidden = false
-    if (count !== null) count.hidden = true
+
+    if (count !== null) {
+      count.hidden = false
+      count.textContent = `Все товары: ${String(cards.length)}`
+    }
 
     return
   }

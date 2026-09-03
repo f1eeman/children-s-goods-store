@@ -52,9 +52,11 @@ const { sections } = Astro.props
                   <tr>
                     {row.map((cell, index) =>
                       index === 0 ? (
-                        <th scope="row">{cell}</th>
+                        <th scope="row" data-label={section.table?.head[index]}>
+                          {cell}
+                        </th>
                       ) : (
-                        <td>{cell}</td>
+                        <td data-label={section.table?.head[index]}>{cell}</td>
                       ),
                     )}
                   </tr>
@@ -148,7 +150,6 @@ const { sections } = Astro.props
 
   .table {
     inline-size: 100%;
-    min-inline-size: 480px;
     border-collapse: collapse;
     text-align: start;
   }
@@ -156,7 +157,6 @@ const { sections } = Astro.props
   .table th,
   .table td {
     padding: 14px 16px 14px 0;
-    border-block-end: 1px solid var(--color-surface-muted);
     line-height: 1.5;
     text-align: start;
     vertical-align: top;
@@ -169,6 +169,60 @@ const { sections } = Astro.props
   .table tbody th {
     font-weight: 400;
     color: var(--color-text-params);
+  }
+
+  @media (width < 768px) {
+    .table,
+    .table thead,
+    .table tbody,
+    .table tr,
+    .table th,
+    .table td {
+      display: block;
+    }
+
+    .table thead {
+      position: absolute;
+      inline-size: 1px;
+      block-size: 1px;
+      clip-path: inset(100%);
+      overflow: hidden;
+    }
+
+    .table tr {
+      padding-block: 14px;
+      border-block-end: 1px solid var(--color-surface-muted);
+    }
+
+    .table tbody th,
+    .table td {
+      padding: 0;
+    }
+
+    .table tbody th + td,
+    .table td + td {
+      margin-block-start: 8px;
+    }
+
+    .table td::before {
+      content: attr(data-label);
+      display: block;
+      color: var(--color-text-params);
+      font-size: 14px;
+      line-height: 1.2;
+    }
+
+    .table tbody th {
+      font-weight: 700;
+      color: var(--color-text);
+    }
+  }
+
+  @media (width >= 768px) {
+    .table th,
+    .table td {
+      border-block-end: 1px solid var(--color-surface-muted);
+    }
   }
 
   @media (width >= 768px) {

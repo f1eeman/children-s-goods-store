@@ -3,6 +3,8 @@ import PageHeader from '@/components/page-header.astro'
 import { REQUISITES } from '@/data/pages'
 import Layout from '@/layouts/Layout.astro'
 
+const isStub = (value: string): boolean => value.toLowerCase() === 'уточняется'
+
 const title = 'Реквизиты — MERRY'
 const description =
   'Реквизиты магазина детских товаров MERRY: наименование, адреса и платёжные данные для оптовых покупателей.'
@@ -22,7 +24,9 @@ const description =
           REQUISITES.rows.map((row) => (
             <div class="row">
               <dt class="label">{row.label}</dt>
-              <dd class="value">{row.value}</dd>
+              <dd class:list={['value', isStub(row.value) && 'stub']}>
+                {row.value}
+              </dd>
             </div>
           ))
         }
@@ -55,6 +59,11 @@ const description =
 
   .value {
     line-height: 1.5;
+  }
+
+  .stub {
+    color: var(--color-text-subtle);
+    font-style: italic;
   }
 
   .note {

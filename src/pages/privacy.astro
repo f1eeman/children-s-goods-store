@@ -1,4 +1,5 @@
 ---
+import PageHeader from '@/components/page-header.astro'
 import Layout from '@/layouts/Layout.astro'
 
 const title = 'Политика конфиденциальности — MERRY'
@@ -7,37 +8,33 @@ const description =
 ---
 
 <Layout {title} {description}>
-  <section class="page">
+  <PageHeader
+    crumbs={[
+      { label: 'Главная', href: '/' },
+      { label: 'Политика конфиденциальности' },
+    ]}
+    title="Политика конфиденциальности"
+    lead="Текст политики готовится. Пока его нет, магазин не собирает данные через сайт: заказ оформляется звонком или письмом, а форм на страницах нет."
+  />
+
+  <section class="section page" aria-label="Текст политики">
     <div class="container">
-      <h1 class="title">Политика конфиденциальности</h1>
-      <p class="lead">Текст политики готовится.</p>
+      <p class="note">
+        Документ появится здесь до запуска. Вопросы о данных — по телефону и
+        почте из раздела контактов.
+      </p>
     </div>
   </section>
 </Layout>
 
 <style>
   .page {
-    padding-block: 56px;
+    min-block-size: 240px;
   }
 
-  .title {
-    font-weight: 600;
-    font-size: 36px;
-    line-height: 1.3;
-  }
-
-  .lead {
-    margin-block-start: 24px;
+  .note {
+    max-inline-size: 720px;
     color: var(--color-text-muted);
-  }
-
-  @media (width >= 1024px) {
-    .page {
-      padding-block: 120px;
-    }
-
-    .title {
-      font-size: 56px;
-    }
+    line-height: 1.5;
   }
 </style>

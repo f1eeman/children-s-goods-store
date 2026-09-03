@@ -54,7 +54,7 @@ const description =
   .list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 30px;
+    gap: 40px 30px;
   }
 
   .card {
@@ -75,8 +75,9 @@ const description =
   .photo {
     inline-size: 100%;
     block-size: auto;
-    aspect-ratio: 16 / 10;
+    aspect-ratio: 4 / 3;
     object-fit: cover;
+    object-position: 50% 25%;
     transition: transform 400ms cubic-bezier(0.2, 0.8, 0.25, 1);
   }
 
@@ -85,7 +86,7 @@ const description =
     flex: 1;
     flex-direction: column;
     gap: 8px;
-    padding: 20px 0 0;
+    padding: 12px 0 0;
   }
 
   .date {
@@ -117,6 +118,12 @@ const description =
 
     .card:hover .title {
       color: var(--color-accent);
+    }
+  }
+
+  @media (width >= 768px) {
+    .photo {
+      aspect-ratio: 16 / 10;
     }
   }
 

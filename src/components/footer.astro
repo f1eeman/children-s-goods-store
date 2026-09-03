@@ -121,8 +121,13 @@ const SOCIALS = [
 
   .columns {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px 24px;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px 24px;
+    margin-block-start: 14px;
+  }
+
+  .columns .list {
+    margin-block-start: 0;
   }
 
   .link:focus-visible,
@@ -161,6 +166,7 @@ const SOCIALS = [
 
     .columns {
       grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 2px 24px;
     }
   }
 
