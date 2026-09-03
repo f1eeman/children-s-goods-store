@@ -1,0 +1,308 @@
+---
+import { Image } from 'astro:assets'
+
+import Button from '@/components/button.astro'
+import PageHeader from '@/components/page-header.astro'
+import Quantity from '@/components/quantity.astro'
+import { PRODUCTS, hrefOf } from '@/data/catalog'
+import { CART_PAGE } from '@/data/pages'
+import { priceLabel } from '@/data/price'
+import { SITE } from '@/data/site'
+import Layout from '@/layouts/Layout.astro'
+---
+
+<Layout
+  title={CART_PAGE.metaTitle}
+  description={CART_PAGE.metaDescription}
+  noindex
+>
+  <PageHeader
+    crumbs={[{ label: 'Главная', href: '/' }, { label: CART_PAGE.h1 }]}
+    title={CART_PAGE.h1}
+    lead={CART_PAGE.lead}
+  />
+
+  <section class="section" aria-label="Отложенные товары" data-cart-page>
+    <div class="container">
+      <div class="empty" tabindex="-1" data-cart-empty>
+        <p class="empty-title">{CART_PAGE.emptyTitle}</p>
+        <p class="empty-text">{CART_PAGE.emptyText}</p>
+        <Button as="a" href="/catalog/" size="md" class="empty-action">
+          {CART_PAGE.emptyLabel}
+        </Button>
+      </div>
+
+      <ul
+        class="lines"
+        data-cart-lines
+        data-cart-lines-unset={CART_PAGE.unsetOptions}
+        hidden
+      >
+      </ul>
+
+      {
+        PRODUCTS.map((product) => (
+          <template data-cart-template={product.slug}>
+            <li class="line" data-cart-line>
+              <a
+                class="shot"
+                href={hrefOf(product)}
+                tabindex="-1"
+                aria-hidden="true"
+              >
+                <Image
+                  class="photo"
+                  src={product.image}
+                  alt=""
+                  widths={[120, 240]}
+                  sizes="96px"
+                  loading="lazy"
+                />
+              </a>
+
+              <div class="body">
+                <h2 class="title">
+                  <a class="title-link" href={hrefOf(product)}>
+                    {product.title}
+                  </a>
+                </h2>
+                <p class="options">
+                  <span class="visually-hidden">Выбрано: </span>
+                  <span data-cart-line-options />
+                </p>
+                <p class="price">{priceLabel(product.price)} за штуку</p>
+              </div>
+
+              <div class="controls">
+                <Quantity label={`Количество: ${product.title}`} />
+                <p class="sum" data-cart-line-sum />
+                <button
+                  class="remove"
+                  type="button"
+                  data-cart-remove
+                  aria-label={`Убрать «${product.title}» из корзины`}
+                >
+                  Убрать
+                </button>
+              </div>
+            </li>
+          </template>
+        ))
+      }
+
+      <div class="summary" data-cart-summary hidden>
+        <p class="total">
+          Итого: <span class="total-value" data-cart-sum>0 ₽</span>
+        </p>
+
+        <p class="note">{CART_PAGE.note}</p>
+
+        <div class="actions">
+          <Button as="a" href={`tel:${SITE.phone.href}`} size="md">
+            Позвонить {SITE.phone.label}
+          </Button>
+          <Button
+            as="a"
+            href={`mailto:${SITE.email}`}
+            size="md"
+            variant="light-ink"
+          >
+            Написать письмо
+          </Button>
+          <button class="clear" type="button" data-cart-clear>
+            {CART_PAGE.clearLabel}
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .empty,
+  .summary {
+    padding: 24px 20px;
+    border-radius: var(--radius-block);
+    background-color: var(--color-surface-muted);
+  }
+
+  .empty {
+    display: grid;
+    gap: 12px;
+    justify-items: start;
+  }
+
+  .empty:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+
+  .empty-title {
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 1.5;
+  }
+
+  .empty-text {
+    max-inline-size: 560px;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+  }
+
+  .empty-action {
+    margin-block-start: 8px;
+    min-inline-size: 183px;
+  }
+
+  .lines {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .lines :global(.line) {
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1fr);
+    gap: 16px 20px;
+    padding-block-end: 20px;
+    border-block-end: 1px solid var(--color-surface-muted);
+  }
+
+  .lines :global(.shot) {
+    display: block;
+    border-radius: var(--radius-block);
+    background-color: var(--color-surface-muted);
+    overflow: hidden;
+  }
+
+  .lines :global(.photo) {
+    inline-size: 100%;
+    block-size: auto;
+    aspect-ratio: 270 / 325;
+    object-fit: cover;
+  }
+
+  .lines :global(.title) {
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 1.5;
+  }
+
+  .lines :global(.title-link) {
+    transition: color 180ms ease;
+  }
+
+  .lines :global(.options),
+  .lines :global(.price) {
+    margin-block-start: 4px;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+  }
+
+  .lines :global(.controls) {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 12px;
+    align-items: center;
+    grid-column: 1 / -1;
+  }
+
+  .lines :global(.sum) {
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 1.2;
+    text-align: end;
+  }
+
+  .lines :global(.remove) {
+    padding-block: 10px;
+    margin-block: -10px;
+    color: var(--color-text-muted);
+    transition: color 180ms ease;
+  }
+
+  .lines :global(.remove):focus-visible,
+  .lines :global(.title-link):focus-visible,
+  .clear:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+
+  .summary {
+    display: grid;
+    gap: 16px;
+    margin-block-start: 28px;
+  }
+
+  .total {
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 1.2;
+  }
+
+  .total-value {
+    font-size: 25px;
+  }
+
+  .note {
+    max-inline-size: 640px;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 20px;
+    align-items: center;
+  }
+
+  .clear {
+    padding-block: 10px;
+    margin-block: -10px;
+    color: var(--color-text-muted);
+    transition: color 180ms ease;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .lines :global(.remove):hover,
+    .lines :global(.title-link):hover,
+    .clear:hover {
+      color: var(--color-accent);
+    }
+  }
+
+  @media (width >= 768px) {
+    .empty,
+    .summary {
+      padding: 30px;
+    }
+
+    .lines :global(.line) {
+      grid-template-columns: 96px minmax(0, 1fr) auto;
+      align-items: center;
+    }
+
+    .lines :global(.controls) {
+      grid-column: auto;
+      grid-template-columns: auto 96px auto;
+      gap: 20px;
+    }
+
+    .lines :global(.sum) {
+      font-size: 20px;
+    }
+
+    .total {
+      text-align: end;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lines :global(.remove),
+    .lines :global(.title-link),
+    .clear {
+      transition: none;
+    }
+  }
+</style>

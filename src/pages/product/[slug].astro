@@ -68,7 +68,7 @@ const description = `${product.title} за ${String(product.price)} ₽ в ма�
           />
         </div>
 
-        <div class="info">
+        <div class="info" data-cart-scope>
           {
             product.saleEndsAt !== undefined && (
               <Timer endsAt={product.saleEndsAt} />
@@ -91,6 +91,7 @@ const description = `${product.title} за ${String(product.price)} ₽ в ма�
                 label="Размер"
                 options={sizes}
                 placeholder="Выберите товар"
+                data-cart-size
               />
             </div>
 
@@ -100,6 +101,7 @@ const description = `${product.title} за ${String(product.price)} ₽ в ма�
                 label="Цвет"
                 options={colors}
                 placeholder="Выберите цвет"
+                data-cart-color
               />
             </div>
           </div>
@@ -109,7 +111,15 @@ const description = `${product.title} за ${String(product.price)} ₽ в ма�
             <Quantity label="Количество товара" />
           </div>
 
-          <Button type="button" size="md" class="buy">
+          <Button
+            type="button"
+            size="md"
+            class="buy"
+            data-cart-add
+            data-cart-slug={product.slug}
+            data-cart-title={product.title}
+            data-cart-done="Положили в корзину"
+          >
             Положить в корзину
           </Button>
         </div>

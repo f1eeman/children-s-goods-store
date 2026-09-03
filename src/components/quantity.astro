@@ -1,4 +1,6 @@
 ---
+import { MAX_QTY } from '@/data/price'
+
 interface Props {
   label: string
 }
@@ -21,7 +23,7 @@ const { label } = Astro.props
     class="value"
     type="number"
     min="1"
-    max="99"
+    max={MAX_QTY}
     step="1"
     value="1"
     inputmode="numeric"

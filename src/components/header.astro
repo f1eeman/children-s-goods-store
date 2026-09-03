@@ -1,7 +1,7 @@
 ---
-/* eslint-disable astro/jsx-a11y/anchor-is-valid -- корзина и вход ведут в разделы, которых макет не даёт */
+/* eslint-disable astro/jsx-a11y/anchor-is-valid -- вход ведёт в раздел, которого макет не даёт */
 import { MAIN_NAV } from '@/data/nav'
-import { CART, SITE } from '@/data/site'
+import { SITE } from '@/data/site'
 import CatalogIcon from '@/img/icons/catalog.svg'
 import Cart from '@/img/icons/cart.svg'
 import Clock from '@/img/icons/clock.svg'
@@ -38,14 +38,15 @@ import Input from '@/components/input.astro'
       </ul>
 
       <div class="account">
-        <a class="cart" href="#">
+        <a class="cart" href="/cart/">
+          <span class="visually-hidden">Корзина</span>
           <span class="cart-icon">
             <Cart aria-hidden="true" />
-            <span class="badge">{CART.count}</span>
+            <span class="badge" data-cart-count hidden>0</span>
           </span>
           <span class="cart-text">
             <span class="cart-caption">Сумма заказа:</span>
-            <span class="cart-total"><b>{CART.total} </b>₽</span>
+            <span class="cart-total" data-cart-total>0 ₽</span>
           </span>
         </a>
 
@@ -229,7 +230,7 @@ import Input from '@/components/input.astro'
     font-weight: 400;
   }
 
-  .cart-total b {
+  .cart-total {
     font-weight: 700;
   }
 

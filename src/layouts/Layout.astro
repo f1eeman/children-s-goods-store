@@ -4,6 +4,7 @@ import { Font } from 'astro:assets'
 import Footer from '@/components/footer.astro'
 import Header from '@/components/header.astro'
 import Seo from '@/components/seo.astro'
+import { PRICES } from '@/data/catalog'
 
 import '@/styles/index.css'
 
@@ -35,11 +36,33 @@ const { title, description, noindex = false } = Astro.props
       <slot />
     </main>
     <Footer />
+
+    <p
+      class="visually-hidden"
+      role="status"
+      data-cart-live
+      data-cart-live-added="%s — в корзине"
+      data-cart-live-removed="Товар убран из корзины"
+      data-cart-live-cleared="Корзина пуста"
+      data-cart-live-qty="%n шт., %s"
+      data-cart-live-failed="Браузер не разрешает хранить корзину: список не сохранится"
+    >
+    </p>
+
+    <script
+      type="application/json"
+      data-cart-prices
+      is:inline
+      set:html={JSON.stringify(PRICES)}
+    />
+
     <script>
       import { initCarousel } from '@/scripts/carousel'
+      import { initCart } from '@/scripts/cart'
       import { initReveal } from '@/scripts/reveal'
 
       initCarousel()
+      initCart()
       initReveal()
     </script>
   </body>

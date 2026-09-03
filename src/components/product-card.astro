@@ -55,7 +55,17 @@ const href = hrefOf(product)
 
   <div class="row">
     <p class="price">{product.price}₽</p>
-    <Button type="button" class="to-cart">В корзину</Button>
+    <Button
+      type="button"
+      class="to-cart"
+      aria-label={`В корзину — ${product.title}`}
+      data-cart-add
+      data-cart-slug={product.slug}
+      data-cart-title={product.title}
+      data-cart-done="Готово"
+    >
+      В корзину
+    </Button>
   </div>
 </article>
 
