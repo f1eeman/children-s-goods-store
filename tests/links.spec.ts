@@ -47,7 +47,6 @@ test('в решётку ведут только заглушки, которых
     )
 
   expect(stubs).toStrictEqual([
-    'cart',
     'login',
     'social',
     'social',
