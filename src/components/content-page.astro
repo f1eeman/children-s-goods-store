@@ -1,0 +1,46 @@
+---
+import ContentSections from '@/components/content-sections.astro'
+import CtaBlock from '@/components/cta-block.astro'
+import PageHeader from '@/components/page-header.astro'
+import type { Crumb } from '@/data/nav'
+import type { ContentPage } from '@/data/pages'
+import Layout from '@/layouts/Layout.astro'
+
+interface Props {
+  page: ContentPage
+  parent?: Crumb
+}
+
+const { page, parent } = Astro.props
+
+const crumbs: Crumb[] = [
+  { label: 'Главная', href: '/' },
+  ...(parent === undefined ? [] : [parent]),
+  { label: page.h1 },
+]
+---
+
+<Layout title={page.metaTitle} description={page.metaDescription}>
+  <PageHeader {crumbs} title={page.h1} lead={page.lead} />
+
+  <section class="section" aria-label={page.h1}>
+    <div class="container">
+      <ContentSections sections={page.sections} />
+    </div>
+  </section>
+
+  {
+    page.cta !== undefined && (
+      <section class="section" data-region aria-label="Как связаться">
+        <div class="container">
+          <CtaBlock
+            title={page.cta.title}
+            text={page.cta.text}
+            label={page.cta.label}
+            href={page.cta.href}
+          />
+        </div>
+      </section>
+    )
+  }
+</Layout>

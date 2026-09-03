@@ -1,0 +1,97 @@
+---
+import { NOT_FOUND } from '@/data/pages'
+import Layout from '@/layouts/Layout.astro'
+
+const title = 'Страница не найдена — MERRY'
+const description =
+  'Такой страницы в магазине MERRY нет. Загляните в каталог детской одежды или напишите нам.'
+---
+
+<Layout {title} {description} noindex>
+  <section class="section screen" data-region aria-labelledby="not-found-title">
+    <div class="container inner">
+      <p class="code" aria-hidden="true">404</p>
+      <h1 class="title" id="not-found-title">{NOT_FOUND.h1}</h1>
+      <p class="lead">{NOT_FOUND.lead}</p>
+
+      <ul class="links">
+        {
+          NOT_FOUND.links.map((link) => (
+            <li>
+              <a class="link" href={link.href}>
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .code {
+    font-weight: 700;
+    font-size: clamp(72px, 18vw, 140px);
+    line-height: 1;
+    color: var(--color-surface-muted);
+  }
+
+  .title {
+    margin-block-start: 8px;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 1.2;
+  }
+
+  .lead {
+    max-inline-size: 520px;
+    margin-block-start: 16px;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 24px;
+    justify-content: center;
+    margin-block-start: 28px;
+  }
+
+  .link {
+    font-weight: 700;
+    color: var(--color-accent);
+    transition: color 180ms ease;
+  }
+
+  .link:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .link:hover {
+      color: var(--color-text);
+    }
+  }
+
+  @media (width >= 768px) {
+    .title {
+      font-size: 30px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .link {
+      transition: none;
+    }
+  }
+</style>

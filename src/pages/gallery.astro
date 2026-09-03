@@ -1,0 +1,65 @@
+---
+import { Image } from 'astro:assets'
+
+import PageHeader from '@/components/page-header.astro'
+import { GALLERY } from '@/data/gallery'
+import Layout from '@/layouts/Layout.astro'
+
+const title = 'Фотогалерея — MERRY'
+const description =
+  'Фотографии товаров и съёмок магазина детских товаров MERRY: одежда, шапки, купальники и то, как мы это показываем.'
+---
+
+<Layout {title} {description}>
+  <PageHeader
+    crumbs={[{ label: 'Главная', href: '/' }, { label: 'Фотогалерея' }]}
+    title="Фотогалерея"
+    lead={GALLERY.lead}
+  />
+
+  <section class="section" aria-label="Фотографии">
+    <div class="container">
+      <ul class="grid">
+        {
+          GALLERY.items.map((shot) => (
+            <li class="cell">
+              <figure class="figure">
+                <Image
+                  class="photo"
+                  src={shot.image}
+                  alt={shot.caption}
+                  widths={[360, 720]}
+                  sizes="(width >= 1024px) 360px, (width >= 600px) 45vw, 90vw"
+                  loading="lazy"
+                />
+                <figcaption class="caption">{shot.caption}</figcaption>
+              </figure>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 30px;
+  }
+
+  .photo {
+    inline-size: 100%;
+    block-size: auto;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius-block);
+    object-fit: cover;
+  }
+
+  .caption {
+    margin-block-start: 12px;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+  }
+</style>

@@ -1,0 +1,124 @@
+---
+import Button from '@/components/button.astro'
+import Input from '@/components/input.astro'
+import PageHeader from '@/components/page-header.astro'
+import ProductCard from '@/components/product-card.astro'
+import { CATEGORIES, PRODUCTS } from '@/data/catalog'
+import { SEARCH } from '@/data/pages'
+import Layout from '@/layouts/Layout.astro'
+
+const titleOf = (slug: string): string =>
+  CATEGORIES.find((category) => category.slug === slug)?.title ?? ''
+
+const keywordsOf = (categories: string[], material: string): string =>
+  [
+    ...categories.map(titleOf),
+    material === 'cotton' ? 'хб хлопок' : 'синтетика полиэстер',
+    'одежда',
+  ].join(' ')
+
+const title = 'Поиск по каталогу — MERRY'
+const description =
+  'Поиск товаров магазина детских товаров MERRY: одежда, шапки, купальники и обувь для малышей.'
+---
+
+<Layout {title} {description} noindex>
+  <PageHeader
+    crumbs={[{ label: 'Главная', href: '/' }, { label: SEARCH.h1 }]}
+    title={SEARCH.h1}
+    lead={SEARCH.lead}
+  />
+
+  <section class="section" aria-label="Результаты поиска" data-search>
+    <div class="container">
+      <form class="form" role="search" action="/search/">
+        <Input
+          type="search"
+          name="q"
+          class="field"
+          placeholder="Искать товар на сайте"
+          aria-label="Искать товар на сайте"
+          data-search-input
+        />
+        <Button type="submit" size="md">Найти</Button>
+      </form>
+
+      <p class="count" data-search-count hidden></p>
+
+      <p class="state" data-search-blank hidden>{SEARCH.blankText}</p>
+
+      <div class="grid" data-search-grid>
+        {
+          PRODUCTS.map((product) => (
+            <ProductCard
+              {product}
+              keywords={keywordsOf(product.categories, product.material)}
+              sizes="(width >= 1250px) 270px, (width >= 768px) 30vw, 90vw"
+            />
+          ))
+        }
+      </div>
+
+      <div class="state" data-search-empty hidden>
+        <p class="empty-title">{SEARCH.emptyTitle}</p>
+        <p class="empty-text">{SEARCH.emptyText}</p>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  import { initSearch } from '@/scripts/search'
+
+  initSearch()
+</script>
+
+<style>
+  .form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    max-inline-size: 560px;
+  }
+
+  .field {
+    flex: 1;
+    min-inline-size: 200px;
+    block-size: var(--control-height);
+  }
+
+  .count {
+    margin-block-start: 20px;
+    color: var(--color-text-muted);
+  }
+
+  .state {
+    margin-block-start: 24px;
+  }
+
+  .empty-title {
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 1.5;
+  }
+
+  .empty-text {
+    max-inline-size: 640px;
+    margin-block-start: 8px;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 40px 30px;
+    margin-block-start: 28px;
+  }
+
+  @media (width >= 768px) {
+    .grid {
+      gap: 60px 30px;
+    }
+  }
+</style>

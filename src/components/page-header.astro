@@ -1,0 +1,56 @@
+---
+import Breadcrumbs from '@/components/breadcrumbs.astro'
+import type { Crumb } from '@/data/nav'
+
+interface Props {
+  crumbs: Crumb[]
+  title: string
+  lead?: string
+}
+
+const { crumbs, title, lead } = Astro.props
+---
+
+<section class="section head">
+  <div class="container">
+    <Breadcrumbs {crumbs} />
+    <h1 class="title">{title}</h1>
+    {lead !== undefined && <p class="lead">{lead}</p>}
+  </div>
+</section>
+
+<style>
+  .head {
+    padding-block-start: 24px;
+  }
+
+  .title {
+    margin-block-start: 16px;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 1.2;
+  }
+
+  .lead {
+    max-inline-size: 720px;
+    margin-block-start: 16px;
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--color-text-muted);
+  }
+
+  @media (width >= 768px) {
+    .head {
+      padding-block-start: 32px;
+    }
+
+    .title {
+      font-size: 30px;
+    }
+
+    .lead {
+      margin-block-start: 20px;
+      font-size: 18px;
+    }
+  }
+</style>

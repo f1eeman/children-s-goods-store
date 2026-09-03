@@ -1,0 +1,74 @@
+---
+import PageHeader from '@/components/page-header.astro'
+import { REQUISITES } from '@/data/pages'
+import Layout from '@/layouts/Layout.astro'
+
+const title = 'Реквизиты — MERRY'
+const description =
+  'Реквизиты магазина детских товаров MERRY: наименование, адреса и платёжные данные для оптовых покупателей.'
+---
+
+<Layout {title} {description}>
+  <PageHeader
+    crumbs={[{ label: 'Главная', href: '/' }, { label: 'Реквизиты' }]}
+    title="Реквизиты"
+    lead={REQUISITES.lead}
+  />
+
+  <section class="section" aria-label="Реквизиты организации">
+    <div class="container">
+      <dl class="rows">
+        {
+          REQUISITES.rows.map((row) => (
+            <div class="row">
+              <dt class="label">{row.label}</dt>
+              <dd class="value">{row.value}</dd>
+            </div>
+          ))
+        }
+      </dl>
+
+      <p class="note">{REQUISITES.note}</p>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .rows {
+    max-inline-size: 720px;
+  }
+
+  .row {
+    display: grid;
+    gap: 4px;
+    padding-block: 14px;
+    border-block-end: 1px solid var(--color-surface-muted);
+  }
+
+  .row:first-child {
+    border-block-start: 1px solid var(--color-surface-muted);
+  }
+
+  .label {
+    color: var(--color-text-params);
+  }
+
+  .value {
+    line-height: 1.5;
+  }
+
+  .note {
+    max-inline-size: 720px;
+    margin-block-start: 24px;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+  }
+
+  @media (width >= 600px) {
+    .row {
+      grid-template-columns: 240px minmax(0, 1fr);
+      gap: 20px;
+      align-items: baseline;
+    }
+  }
+</style>

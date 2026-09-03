@@ -1,0 +1,20 @@
+---
+import type { GetStaticPaths } from 'astro'
+
+import ContentPage from '@/components/content-page.astro'
+import { COOPERATION, type ContentPage as Page } from '@/data/pages'
+
+export const getStaticPaths = (() =>
+  COOPERATION.map((page) => ({
+    params: { slug: page.slug },
+    props: { page },
+  }))) satisfies GetStaticPaths
+
+interface Props {
+  page: Page
+}
+
+const { page } = Astro.props
+---
+
+<ContentPage {page} />

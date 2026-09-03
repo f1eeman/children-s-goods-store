@@ -1,0 +1,142 @@
+---
+import type { GetStaticPaths } from 'astro'
+import { Image } from 'astro:assets'
+
+import PageHeader from '@/components/page-header.astro'
+import { NEWS, type Post, dateLabel } from '@/data/news'
+import Layout from '@/layouts/Layout.astro'
+
+export const getStaticPaths = (() =>
+  NEWS.posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }))) satisfies GetStaticPaths
+
+interface Props {
+  post: Post
+}
+
+const { post } = Astro.props
+
+const title = `${post.title} — новости MERRY`
+---
+
+<Layout {title} description={post.lead}>
+  <PageHeader
+    crumbs={[
+      { label: 'Главная', href: '/' },
+      { label: 'Новости', href: '/news/' },
+      { label: post.title },
+    ]}
+    title={post.title}
+    lead={post.lead}
+  />
+
+  <section class="section" aria-label="Текст новости">
+    <div class="container">
+      <p class="date">
+        <time datetime={post.date}>{dateLabel(post.date)}</time>
+      </p>
+
+      <div class="shot">
+        <Image
+          class="photo"
+          src={post.image}
+          alt=""
+          widths={[768, 1170]}
+          sizes="(width >= 1250px) 1170px, 100vw"
+          loading="eager"
+        />
+      </div>
+
+      <div class="body">
+        {
+          post.body.map((block) => (
+            <div class="block">
+              {block.heading !== undefined && (
+                <h2 class="heading">{block.heading}</h2>
+              )}
+              {block.paragraphs.map((text) => (
+                <p class="text">{text}</p>
+              ))}
+            </div>
+          ))
+        }
+      </div>
+
+      <p class="back"><a class="back-link" href="/news/">Все новости</a></p>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .date {
+    color: var(--color-text-subtle);
+    font-size: 14px;
+    line-height: 1.2;
+  }
+
+  .shot {
+    margin-block-start: 20px;
+    border-radius: var(--radius-block);
+    overflow: hidden;
+  }
+
+  .photo {
+    inline-size: 100%;
+    block-size: auto;
+    aspect-ratio: 1170 / 500;
+    object-fit: cover;
+  }
+
+  .body {
+    display: grid;
+    gap: 28px;
+    margin-block-start: 32px;
+  }
+
+  .heading {
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 1.5;
+  }
+
+  .text {
+    max-inline-size: 720px;
+    margin-block-start: 12px;
+    line-height: 1.5;
+  }
+
+  .back {
+    margin-block-start: 32px;
+  }
+
+  .back-link {
+    font-weight: 700;
+    color: var(--color-accent);
+    transition: color 180ms ease;
+  }
+
+  .back-link:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .back-link:hover {
+      color: var(--color-text);
+    }
+  }
+
+  @media (width >= 768px) {
+    .heading {
+      font-size: 20px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .back-link {
+      transition: none;
+    }
+  }
+</style>

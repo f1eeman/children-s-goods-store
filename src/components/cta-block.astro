@@ -1,0 +1,68 @@
+---
+import Button from '@/components/button.astro'
+
+interface Props {
+  title: string
+  text: string
+  label: string
+  href: string
+}
+
+const { title, text, label, href } = Astro.props
+---
+
+<div class="cta">
+  <div class="copy">
+    <p class="title">{title}</p>
+    <p class="text">{text}</p>
+  </div>
+
+  <Button as="a" {href} variant="light" size="md" class="action">{label}</Button
+  >
+</div>
+
+<style>
+  .cta {
+    display: grid;
+    gap: 20px;
+    padding: 24px 20px;
+    border-radius: var(--radius-block);
+    background-color: var(--color-accent);
+    color: var(--color-text-on-accent);
+  }
+
+  .title {
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 1.5;
+  }
+
+  .text {
+    max-inline-size: 560px;
+    margin-block-start: 8px;
+    line-height: 1.5;
+    opacity: 0.8;
+  }
+
+  .action {
+    justify-self: start;
+    min-inline-size: 183px;
+  }
+
+  @media (width >= 768px) {
+    .cta {
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 30px;
+      align-items: center;
+      padding: 30px;
+    }
+
+    .title {
+      font-size: 24px;
+    }
+
+    .action {
+      justify-self: end;
+    }
+  }
+</style>
