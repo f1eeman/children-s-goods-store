@@ -10,8 +10,3 @@ export const SITE = {
     { days: 'вс:', hours: '09:00-17:00' },
   ],
 } as const
-
-export const CART = {
-  count: 2,
-  total: '440 000',
-} as const

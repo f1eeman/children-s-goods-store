@@ -216,3 +216,7 @@ export const RECENT: Product[] = PRODUCTS.slice(3)
 
 export const alsoBought = (slug: string): Product[] =>
   PRODUCTS.filter((product) => product.slug !== slug).slice(0, 3)
+
+export const PRICES: Record<string, number> = Object.fromEntries(
+  PRODUCTS.map((product) => [product.slug, product.price]),
+)
