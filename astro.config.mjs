@@ -3,7 +3,7 @@ import sitemap from '@astrojs/sitemap'
 
 export default defineConfig({
   site: 'https://example.invalid',
-  integrations: [sitemap()],
+  integrations: [sitemap({ filter: (page) => !page.includes('/search') })],
   fonts: [
     {
       provider: fontProviders.local(),

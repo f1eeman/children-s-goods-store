@@ -5,25 +5,33 @@ export interface Link {
 
 export const MAIN_NAV: Link[] = [
   { href: '/catalog/akcii/', label: 'Акции' },
-  { href: '#', label: 'Сертификаты' },
-  { href: '#', label: 'Доставка и оплата' },
-  { href: '#', label: 'Фотогалерея' },
-  { href: '#', label: 'О компании' },
+  { href: '/certificates/', label: 'Сертификаты' },
+  { href: '/delivery/', label: 'Доставка и оплата' },
+  { href: '/gallery/', label: 'Фотогалерея' },
+  { href: '/about/', label: 'О компании' },
   { href: '/#contacts', label: 'Контакты' },
 ]
 
 export const FOOTER_COLUMNS: Link[][] = [
   [
-    { href: '#', label: 'О компании' },
-    { href: '#', label: 'Условия работы' },
-    { href: '#', label: 'Фотогалерея' },
-    { href: '#', label: 'Сертификаты' },
+    { href: '/about/', label: 'О компании' },
+    { href: '/terms/', label: 'Условия работы' },
+    { href: '/gallery/', label: 'Фотогалерея' },
+    { href: '/certificates/', label: 'Сертификаты' },
   ],
   [
-    { href: '#', label: 'Реквизиты' },
-    { href: '#', label: 'Партнерам' },
-    { href: '#', label: 'Амбассадорам' },
-    { href: '#', label: 'Блогерам' },
+    { href: '/requisites/', label: 'Реквизиты' },
+    { href: '/cooperation/partners/', label: 'Партнёрам' },
+    { href: '/cooperation/ambassadors/', label: 'Амбассадорам' },
+    { href: '/cooperation/bloggers/', label: 'Блогерам' },
   ],
-  [{ href: '#', label: 'Новости' }],
+  [
+    { href: '/news/', label: 'Новости' },
+    { href: '/privacy/', label: 'Политика конфиденциальности' },
+  ],
 ]
+
+export interface Crumb {
+  label: string
+  href?: string
+}

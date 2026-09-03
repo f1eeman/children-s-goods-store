@@ -1,7 +1,9 @@
 ---
 import type { GetStaticPaths } from 'astro'
 
-import Breadcrumbs, { type Crumb } from '@/components/breadcrumbs.astro'
+import Breadcrumbs from '@/components/breadcrumbs.astro'
+import CategoryNav from '@/components/category-nav.astro'
+import type { Crumb } from '@/data/nav'
 import CatalogPromo from '@/components/catalog-promo.astro'
 import Filters from '@/components/filters.astro'
 import Pagination from '@/components/pagination.astro'
@@ -67,6 +69,8 @@ const description = `${category.title} для детей в магазине MER
           data-catalog-sort
         />
       </div>
+
+      <CategoryNav current={slug} />
     </div>
   </section>
 
@@ -118,7 +122,7 @@ const description = `${category.title} для детей в магазине MER
   .row {
     display: grid;
     gap: 16px;
-    margin-block-start: 16px;
+    margin-block: 16px 24px;
   }
 
   .title {

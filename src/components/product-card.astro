@@ -8,12 +8,14 @@ import { hrefOf, type Product } from '@/data/catalog'
 interface Props {
   product: Product
   sizes?: string
+  keywords?: string
   class?: string
 }
 
 const {
   product,
   sizes = '(width >= 1250px) 270px, (width >= 768px) 45vw, 90vw',
+  keywords,
   class: className,
 } = Astro.props
 
@@ -27,6 +29,7 @@ const href = hrefOf(product)
   data-gender={product.gender}
   data-material={product.material}
   data-title={product.title}
+  data-keywords={keywords}
 >
   <a class="shot" href={href} tabindex="-1" aria-hidden="true">
     <Image
