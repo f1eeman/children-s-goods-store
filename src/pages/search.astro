@@ -31,7 +31,12 @@ const description =
 
   <section class="section" aria-label="Результаты поиска" data-search>
     <div class="container">
-      <form class="form" role="search" action="/search/">
+      <form
+        class="form"
+        role="search"
+        action="/search/"
+        aria-label="Поиск по каталогу"
+      >
         <Input
           type="search"
           name="q"
@@ -52,6 +57,7 @@ const description =
           PRODUCTS.map((product) => (
             <ProductCard
               {product}
+              level={2}
               keywords={keywordsOf(product.categories, product.material)}
               sizes="(width >= 1250px) 270px, (width >= 768px) 30vw, 90vw"
             />

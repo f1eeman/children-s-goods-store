@@ -91,7 +91,12 @@ import Input from '@/components/input.astro'
         Каталог
       </Button>
 
-      <form class="search" role="search" action="/search/">
+      <form
+        class="search"
+        role="search"
+        action="/search/"
+        aria-label="Поиск по сайту"
+      >
         <Input
           type="search"
           name="q"
@@ -247,7 +252,12 @@ import Input from '@/components/input.astro'
   }
 
   .login span {
-    display: none;
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    clip-path: inset(100%);
+    overflow: hidden;
+    white-space: nowrap;
   }
 
   .navbar-row {
@@ -438,7 +448,11 @@ import Input from '@/components/input.astro'
 
   @media (width >= 480px) {
     .login span {
-      display: block;
+      position: static;
+      inline-size: auto;
+      block-size: auto;
+      clip-path: none;
+      overflow: visible;
     }
   }
 

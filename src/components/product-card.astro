@@ -7,6 +7,7 @@ import { hrefOf, type Product } from '@/data/catalog'
 
 interface Props {
   product: Product
+  level?: 2 | 3
   sizes?: string
   keywords?: string
   class?: string
@@ -14,6 +15,7 @@ interface Props {
 
 const {
   product,
+  level = 3,
   sizes = '(width >= 1250px) 270px, (width >= 768px) 45vw, 90vw',
   keywords,
   class: className,
@@ -49,7 +51,21 @@ const href = hrefOf(product)
     }
   </a>
 
-  <h3 class="title"><a class="title-link" href={href}>{product.title}</a></h3>
+  {
+    level === 2 ? (
+      <h2 class="title">
+        <a class="title-link" href={href}>
+          {product.title}
+        </a>
+      </h2>
+    ) : (
+      <h3 class="title">
+        <a class="title-link" href={href}>
+          {product.title}
+        </a>
+      </h3>
+    )
+  }
 
   {product.oldPrice !== undefined && <p class="old">{product.oldPrice} ₽</p>}
 
